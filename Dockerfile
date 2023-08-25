@@ -14,9 +14,10 @@ RUN \
 	&& rm -rf /var/lib/apt/lists/* \
 # add alias
 	&& echo "gem: --no-document" >> ~/.gemrc \
-	&& echo "alias ll='ls -la'" >> ~/.bashrc \
+	&& echo "alias ll='ls -la'" >> ~/.bashrc
+
 # install rails / bundler
-	&& which gem \
+RUN which gem \
 	&& gem install rails -v 7.0.4 \
 	&& gem install bundler -v 2.4.12 \
 	&& rails -v
