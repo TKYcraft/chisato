@@ -4,17 +4,14 @@ WORKDIR /opt/app
 
 ENV RAILS_ENV production
 
-RUN \
-# install apt package.
-	apt-get update \
+RUN apt-get update \
 	&& apt-get install -y \
 		build-essential \
 		libmagickwand-dev\
-# clear apt cache.
 	&& apt-get clean -y \
-	&& rm -rf /var/lib/apt/lists/* \
-# install rails / bundler
-	&& gem install rails -v 7.0.4 \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN gem install rails -v 7.0.4 \
 	&& gem install bundler -v 2.4.12
 
 COPY ./ /opt/app/
