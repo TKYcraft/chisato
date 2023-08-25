@@ -2,6 +2,8 @@ FROM ruby:3.2.2-slim-bullseye
 
 WORKDIR /opt/app
 
+ENV RAILS_ENV production
+
 RUN \
 # install apt package.
 	apt-get update \
