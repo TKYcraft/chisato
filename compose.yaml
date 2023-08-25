@@ -1,0 +1,18 @@
+services:
+  app:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: "tkycraft/chisato:ruby3-rails7-0.0.1"
+    container_name: chisato-server
+    volumes:
+      - .:/opt/app/
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: ["CMD", "curl", "-m", "5", "http://localhost:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 4
+      start_period: 10s

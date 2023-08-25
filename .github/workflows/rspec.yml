@@ -1,0 +1,24 @@
+name: Rspec
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: build
+      shell: bash
+      run: |
+        docker-compose -f compose.yaml -f compose.rspec.yaml build
+      env:
+        RAILS_ENV: test
+    - name: exec rspec
+      run:  |
+        docker-compose -f compose.yaml -f compose.rspec.yaml run app bundle exec rspec
+      env:
+        RAILS_ENV: test
