@@ -14,7 +14,7 @@ RUN gem install rails -v 7.0.4 \
 
 COPY ./ /opt/app/
 
-RUN bundle install
+RUN bundle install --without development test
 
 EXPOSE 3000
 
