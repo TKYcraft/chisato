@@ -114,6 +114,9 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.15.4-aarch64-linux)
       racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
+    pkg-config (1.5.2)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -156,7 +159,8 @@ GEM
     rake (13.0.6)
     reline (0.3.8)
       io-console (~> 0.5)
-    rmagick (3.2.0)
+    rmagick (5.3.0)
+      pkg-config (~> 1.4)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
@@ -197,6 +201,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  x86_64-linux
 
 DEPENDENCIES
   bootsnap
@@ -205,7 +210,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 6.0)
   rails (~> 7.0.4)
-  rmagick (~> 3.1)
+  rmagick (~> 5.0)
   rspec-rails (~> 6.0.0)
   sprockets-rails
   tzinfo-data
