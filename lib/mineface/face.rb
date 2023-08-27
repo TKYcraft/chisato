@@ -73,16 +73,20 @@ module Mineface
 			raise ArgumentError if skin_image_url == ""
 			raise ArgumentError unless size.kind_of? Integer
 			raise ArgumentError unless size%8==0
+			
+			_face = MiniMagick::Image.open(skin_image_url)
+			_ornaments = MiniMagick::Image.open(skin_image_url)   # FIXME: too bad duplicated line.
 
-			image = Magick::Image.read(skin_image_url).first
-
-			_face = image.crop(8,8,8,8)   # crop face area.
-			_face.sample!(size,size)   # resize image.
-			_ornaments = image.crop(40,8,8,8)   # crop ornaments area.
-			_ornaments.sample!(size,size)
-			_face.composite!(_ornaments, 0, 0, Magick::OverCompositeOp)
-
-			return _face   # => Magick::Image
+			_face = _face.crop("8x8+8+8")   # crop face area.
+			_face = _face.sample("#{size}x#{size}")   # resize image.
+			_ornaments = _ornaments.crop("8x8+40+8")   # crop ornaments area.
+			_ornaments.sample("#{size}x#{size}")
+			
+			_face = _face.composite(_ornaments) do |c|
+				c.compose "Over"   # OverCompositeOp
+				c.geometry "+0+0"
+			end
+			return _face   # => MiniMagick::Image
 		end
 
 		def request_json _url=""

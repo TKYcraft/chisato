@@ -237,7 +237,7 @@ RSpec.describe Mineface::Face do
 				it "returns image" do
 					url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 					face = Mineface::Face.new
-					expect(face.get_face_image(url).class).to eq Magick::Image
+					expect(face.get_face_image(url).class).to eq MiniMagick::Image
 				end
 			end
 
