@@ -8,9 +8,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 			end
 		rescue => e
 			warn "[WARNING]: #{e.message}"
-			@image_bin = steve_face_image.to_blob do
-				self.format = "PNG"
-			end
+			@image_bin = steve_face_image.to_blob
 		end
 		send_data @image_bin, type: "image/png", disposition: 'inline'
 	end
