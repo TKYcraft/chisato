@@ -3,14 +3,10 @@ class Api::V1::Texture::FaceController < ApplicationController
 		@face = Mineface::Face.new name: params[:id]
 		begin
 			@face.request!
-			@image_bin = @face.image.to_blob do
-				self.format = "PNG"
-			end
+			@image_bin = @face.image.to_blob
 		rescue => e
 			warn "[WARNING]: #{e.message}"
-			@image_bin = steve_face_image.to_blob do
-				self.format = "PNG"
-			end
+			@image_bin = steve_face_image.to_blob
 		end
 		send_data @image_bin, type: "image/png", disposition: 'inline'
 	end
