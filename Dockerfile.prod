@@ -2,12 +2,10 @@ FROM ruby:3.2.2-slim-bullseye
 
 WORKDIR /opt/app
 
-ENV RAILS_ENV production
-
 RUN apt-get update \
 	&& apt-get install -y \
-		build-essential \
-		libmagickwand-dev\
+	build-essential \
+	libmagickwand-dev\
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -20,4 +18,4 @@ RUN bundle install
 
 EXPOSE 3000
 
-ENTRYPOINT ["bin/rails", "s", "-b", "0.0.0.0"]
+ENTRYPOINT ["bin/rails", "s", "-e", "production", "-b", "0.0.0.0"]
