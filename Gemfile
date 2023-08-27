@@ -38,6 +38,7 @@ gem "bootsnap", require: false
 
 # Use Image Magick with Ruby.
 gem 'rmagick', '~> 3.1'
+gem 'mini_magick', '~> 4.12'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

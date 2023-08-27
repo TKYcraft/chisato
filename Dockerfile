@@ -8,6 +8,7 @@ RUN \
 	&& apt-get install -y \
 		build-essential \
 		libmagickwand-dev\
+		imagemagick \
 		curl \
 # clear apt cache.
 	&& apt-get clean -y \
