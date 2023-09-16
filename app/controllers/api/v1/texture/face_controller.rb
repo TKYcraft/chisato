@@ -8,6 +8,8 @@ class Api::V1::Texture::FaceController < ApplicationController
 			warn "[WARNING]: #{e.message}"
 			@image_bin = steve_face_image.to_blob
 		end
+
+		expires_in 1.hours, public: true   # cache-control header.
 		send_data @image_bin, type: "image/png", disposition: 'inline'
 	end
 

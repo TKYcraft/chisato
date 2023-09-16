@@ -21,5 +21,17 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response).to have_http_status(200)
 			end
 		end
+
+		context "response headers" do
+			it "have correct cache-control" do
+				# Act
+				get api_v1_texture_face_path("KrisJelbring")
+
+				# Assert
+				expect(response.headers).to be_present
+				expect(response.headers["Cache-Control"]).to include("public")
+				expect(response.headers["Cache-Control"]).to include("max-age=3600")
+			end
+		end
 	end
 end
