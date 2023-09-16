@@ -8,7 +8,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				get api_v1_texture_face_path("KrisJelbring.png")
 
 				# Assert
-				expect(response).to have_http_status(200)
+				expect(response).to have_http_status 200
 			end
 		end
 
@@ -18,7 +18,39 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				get api_v1_texture_face_path("0.png")
 
 				# Assert
-				expect(response).to have_http_status(200)
+				expect(response).to have_http_status 200
+			end
+		end
+
+		context "request with INCORRECT file extention" do
+			it "returns bad request 400" do
+				# Act
+				get api_v1_texture_face_path("KrisJelbring.PNG")
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				
+				expect(json["status"]).to eq 400
+				expect(json["status_message"]).to eq "Bad Request"
+				expect(json["data"]).to eq({})
+				expect(json["messages"]).to eq ["file extention must be '.png'"]
+			end
+		end
+
+		context "request without file extention" do
+			it "returns bad request 400" do
+				# Act
+				get api_v1_texture_face_path("KrisJelbring")
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				
+				expect(json["status"]).to eq 400
+				expect(json["status_message"]).to eq "Bad Request"
+				expect(json["data"]).to eq({})
+				expect(json["messages"]).to eq ["file extention must be '.png'"]
 			end
 		end
 
