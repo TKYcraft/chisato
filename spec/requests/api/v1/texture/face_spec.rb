@@ -5,7 +5,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		context "give name of exist user to params" do
 			it "success 200" do
 				# Act
-				get api_v1_texture_face_path("KrisJelbring")
+				get api_v1_texture_face_path("KrisJelbring.png")
 
 				# Assert
 				expect(response).to have_http_status(200)
@@ -15,7 +15,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		context "give name of none-exist user to params" do
 			it "success 200" do
 				# Act
-				get api_v1_texture_face_path("0")
+				get api_v1_texture_face_path("0.png")
 
 				# Assert
 				expect(response).to have_http_status(200)
@@ -25,7 +25,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		context "response headers" do
 			it "have correct cache-control" do
 				# Act
-				get api_v1_texture_face_path("KrisJelbring")
+				get api_v1_texture_face_path("KrisJelbring.png")
 
 				# Assert
 				expect(response.headers).to be_present
