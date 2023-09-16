@@ -1,5 +1,10 @@
 class Api::V1::Texture::FaceController < ApplicationController
 	def show
+		unless File.extname(request.fullpath) == ".png"
+			render_status 400, {}, ["file extention must be '.png'"]
+			return nil
+		end
+
 		@face = Mineface::Face.new name: params[:id]
 		begin
 			@face.request!
