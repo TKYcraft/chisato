@@ -30,11 +30,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				# Assert
 				json = JSON.parse(response.body)
 				expect(response).to have_http_status 400
-				
-				expect(json["status"]).to eq 400
-				expect(json["status_message"]).to eq "Bad Request"
-				expect(json["data"]).to eq({})
-				expect(json["messages"]).to eq ["file extention must be '.png'"]
+				expect(json["message"]).to eq "file extention must be .png"
 			end
 		end
 
@@ -46,11 +42,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				# Assert
 				json = JSON.parse(response.body)
 				expect(response).to have_http_status 400
-				
-				expect(json["status"]).to eq 400
-				expect(json["status_message"]).to eq "Bad Request"
-				expect(json["data"]).to eq({})
-				expect(json["messages"]).to eq ["file extention must be '.png'"]
+				expect(json["message"]).to eq "file extention must be .png"
 			end
 		end
 

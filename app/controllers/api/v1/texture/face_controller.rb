@@ -1,7 +1,7 @@
 class Api::V1::Texture::FaceController < ApplicationController
 	def show
 		unless File.extname(request.fullpath) == ".png"
-			render_status 400, {}, ["file extention must be '.png'"]
+			render json: {message: "file extention must be .png"}, status: 400
 			return nil
 		end
 
