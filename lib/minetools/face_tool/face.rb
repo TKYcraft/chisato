@@ -1,5 +1,5 @@
 module Minetools
-	module Facetool
+	module FaceTool
 		require 'net/http'
 		require 'uri'
 		require "json"

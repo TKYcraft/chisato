@@ -5,7 +5,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 			return nil
 		end
 
-		@face = Minetools::Facetool::Face.new name: params[:id]
+		@face = Minetools::FaceTool::Face.new name: params[:id]
 		begin
 			@face.request!
 			@image_bin = @face.image.to_blob
@@ -19,7 +19,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 	end
 
 	private def steve_face_image
-		@face = Minetools::Facetool::Face.new
+		@face = Minetools::FaceTool::Face.new
 		return @face.get_face_image(Rails.root.join('public', "steve.png").to_s)
 	end
 end
