@@ -20,7 +20,7 @@ module Minetools
 			def fetch_status
 				check_instance_variables!
 
-				socket = TCPSocket.new(@host, @port)
+				socket = TCPSocket.new(@host, @port, connect_timeout: 1)
 
 				handshake_packet = generate_handshake_packet()
 				socket.write([handshake_packet.length].pack('C') + handshake_packet)
@@ -28,14 +28,54 @@ module Minetools
 				status_request_packet = "\x00"
 				socket.write([status_request_packet.length].pack('C') + status_request_packet)
 
-				response_length = socket.read(2).unpack('C')[0]
-				response = socket.read(response_length)
+				payload = ""
+				header = ""
+				# packet_length = nil
+				# packet_id = nil
 
-				data = response.force_encoding('UTF-8').encode
-				data = data.slice(3, data.length)
-				json = JSON.parse(data)
+				loop{   # get head of packet.
+					begin
+						char = socket.readchar
+						break if char == "{"
+						header << char
+					rescue => e
+						warn e
+						warn e.message
+						raise e
+					end
+				}
 
+				# split header to length and packet id
+				# for num in 0...header.length do   
+				# 	if header[num] == "\x00"
+				# 		packet_length = header[0...num].bytes.map { |byte| "%02X" % byte }.join("").to_i(16)
+				# 		packet_id = header[num...header.length].bytes.map { |byte| "%02X" % byte }.join("").to_i(16)
+				# 	end
+				# end
+
+				payload << "{"
+				depth = 1
+				loop{   # get payload of packet.
+					begin
+						char = socket.readchar
+						depth += 1 if char == "{"
+						depth -= 1 if char == "}"
+						break if depth == 0
+						payload << char
+					rescue EOFError => e
+						break
+					rescue => e
+						warn e
+						warn e.message
+						raise e
+					end
+				}
+				payload << "}"
 				socket.close
+
+				data = payload.force_encoding('UTF-8').encode
+				# binding.pry
+				json = JSON.parse(data)
 				return json
 			end
 

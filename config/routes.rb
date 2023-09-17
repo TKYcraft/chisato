@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :servers do
-        resources :status, only: [:show]
+        resources :status, only: [:index]
       end
       namespace :texture do
         resources :face, only: [:show]
