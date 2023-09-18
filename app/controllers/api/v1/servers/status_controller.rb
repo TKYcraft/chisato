@@ -11,6 +11,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 			return
 		rescue => e
 			render status: 500, json: {message: e.message}
+			return
 		end
 
 		begin
