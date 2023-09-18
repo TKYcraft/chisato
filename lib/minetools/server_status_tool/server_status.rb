@@ -4,14 +4,11 @@ module Minetools
 		require "json"
 
 		class ServerStatus
-
-			INIT_DEFAULT_ARGUMENTS = {host: nil, port: 25565}.freeze
-
 			attr_reader :host, :port, :status
 			def initialize options={host: nil, port: nil}
-				_opt = INIT_DEFAULT_ARGUMENTS.merge(options)
-				@host = _opt[:host]
-				@port = _opt[:port]
+				@host = options[:host]
+				@port = options[:port]
+				@port = 25565 if @port.nil?   # default
 				@status = nil
 
 				check_instance_variables! e=ArgumentError
@@ -20,7 +17,17 @@ module Minetools
 			def fetch_status
 				check_instance_variables!
 
-				socket = TCPSocket.new(@host, @port, connect_timeout: 1)
+				begin
+					socket = TCPSocket.new(@host, @port, connect_timeout: 1)
+				rescue SocketError => e
+					raise ServiceUnavailableError, e.message
+				rescue Errno::EADDRNOTAVAIL => e
+					raise ServiceUnavailableError, e.message
+				rescue Errno::ECONNREFUSED => e
+					raise ConnectionError, e.message
+				rescue => e
+					raise ConnectionError
+				end
 
 				handshake_packet = generate_handshake_packet()
 				socket.write([handshake_packet.length].pack('C') + handshake_packet)
@@ -45,7 +52,7 @@ module Minetools
 					end
 				}
 
-				# split header to length and packet id
+				# # split header to length and packet id
 				# for num in 0...header.length do   
 				# 	if header[num] == "\x00"
 				# 		packet_length = header[0...num].bytes.map { |byte| "%02X" % byte }.join("").to_i(16)
@@ -63,7 +70,7 @@ module Minetools
 						break if depth == 0
 						payload << char
 					rescue EOFError => e
-						break
+						raise ConnectionError, "Minecraft server returns unexpected EOF."
 					rescue => e
 						warn e
 						warn e.message
@@ -74,7 +81,6 @@ module Minetools
 				socket.close
 
 				data = payload.force_encoding('UTF-8').encode
-				# binding.pry
 				json = JSON.parse(data)
 				return json
 			end
@@ -98,15 +104,28 @@ module Minetools
 			end
 
 			private def check_instance_variables! e=InstanceVariableError
-				raise e, "host must be String." unless @host.class == String
+				raise e, "parameter host must be present." if @host.nil?
+				raise e, "parameter host must be String." unless @host.class == String
 
-				raise e, "port must be Integer." unless @port.class == Integer
-				raise e, "port must be in length 1~65535." unless 1 <= @port && @port <= 65535
+				raise e, "parameter port must be Integer." unless @port.class == Integer
+				raise e, "parameter port must be in length 1~65535." unless 1 <= @port && @port <= 65535
 			end
 		end
 
 		class InstanceVariableError < StandardError
 			def initialize msg="is not correct value."
+				super msg
+			end
+		end
+
+		class ConnectionError < StandardError
+			def initialize msg="Connection error, something is wrong."
+				super msg
+			end
+		end
+
+		class ServiceUnavailableError < StandardError
+			def initialize msg="Service is unavailable."
 				super msg
 			end
 		end
