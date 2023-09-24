@@ -404,6 +404,16 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 						end
 					end
 				end
+
+				context "deny cases by domains" do
+					it "will deny with not exsits top level domain" do
+						get api_v1_servers_status_index_path params: {host: "minecraft.example.com.hogehoge"}
+
+						json = JSON.parse response.body
+						expect(response).to have_http_status 400
+						expect(json["message"]).to eq "given TLD of hostname is not correct."
+					end
+				end
 			end
 		end
 	end
