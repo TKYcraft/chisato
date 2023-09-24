@@ -413,6 +413,30 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 						expect(response).to have_http_status 400
 						expect(json["message"]).to eq "given TLD of hostname is not correct."
 					end
+
+					it "will deny with .local domain" do
+						get api_v1_servers_status_index_path params: {host: "example.local"}
+
+						json = JSON.parse response.body
+						expect(response).to have_http_status 400
+						expect(json["message"]).to eq "given TLD of hostname is not correct."
+					end
+
+					it "will deny with localhost domain" do
+						get api_v1_servers_status_index_path params: {host: "localhost"}
+
+						json = JSON.parse response.body
+						expect(response).to have_http_status 400
+						expect(json["message"]).to eq "given TLD of hostname is not correct."
+					end
+
+					it "will deny with localhost domain" do
+						get api_v1_servers_status_index_path params: {host: "hogehoge-pc"}
+
+						json = JSON.parse response.body
+						expect(response).to have_http_status 400
+						expect(json["message"]).to eq "given host is not IP address or correct hostname."
+					end
 				end
 			end
 		end
