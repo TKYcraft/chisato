@@ -37,7 +37,7 @@ module App
       tld_list = File.open(Rails.root.join("config", "tld_list.yaml"), "r") do |f|
         YAML.load(f)
       end
-    rescue Errno::ENOENT => e
+    rescue => e
       warn "config/application.rb #{e.class}: #{e.message}"
       exit 1
     end
