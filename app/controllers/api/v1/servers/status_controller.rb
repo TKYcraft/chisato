@@ -26,10 +26,10 @@ class Api::V1::Servers::StatusController < ApplicationController
 			render status: 500, json: {message: e.message}
 			return
 		end
-		render status: 200, json: filter(@server.status)
+		render status: 200, json: convert(@server.status)
 	end
 
-	private def filter _status
+	private def convert _status
 		raise ArgumentError unless _status.class == Hash
 
 		return {
