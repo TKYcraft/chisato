@@ -33,6 +33,16 @@ module App
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    begin
+      tld_list = File.open(Rails.root.join("config", "tld_list.yaml"), "r") do |f|
+        YAML.load(f)
+      end
+    rescue Errno::ENOENT => e
+      warn "config/application.rb #{e.class}: #{e.message}"
+      exit 1
+    end
+    config.tld_list = tld_list
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

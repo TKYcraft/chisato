@@ -85,7 +85,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.downcase
 		return false if _match.nil?
 
-		tld_list = get_tld_list()["tld"]
+		tld_list = App::Application.config.tld_list["tld"]
 		raise ArgumentError, "given TLD of hostname is not correct." unless tld_list.include? _match[1]
 		return true
 	end
@@ -100,12 +100,5 @@ class Api::V1::Servers::StatusController < ApplicationController
 			raise DeniedHostError if IPAddr.new(addr).include? _host_address
 		end
 		return true
-	end
-
-	private def get_tld_list
-		tld_list = File.open(Rails.root.join("config", "tld_list.yaml"), "r") do |f|
-			YAML.load(f)
-		end
-		return tld_list
 	end
 end
