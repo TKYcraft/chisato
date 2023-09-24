@@ -430,7 +430,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 						expect(json["message"]).to eq "given TLD of hostname is not correct."
 					end
 
-					it "will deny with localhost domain" do
+					it "will deny with hogehoge-pc domain" do
 						get api_v1_servers_status_index_path params: {host: "hogehoge-pc"}
 
 						json = JSON.parse response.body
