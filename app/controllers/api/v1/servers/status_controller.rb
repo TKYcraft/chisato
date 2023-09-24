@@ -82,7 +82,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 	end
 
 	private def _host_name_filter_default _host
-		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+([a-zA-Z]{2,})$/.match _host.downcase
+		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.downcase
 		return false if _match.nil?
 
 		tld_list = get_tld_list()["tld"]
