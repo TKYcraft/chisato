@@ -103,7 +103,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 	end
 
 	private def get_tld_list
-		tld_list = open(Rails.root.join("config", "tld_list.yaml")) do |f|
+		tld_list = File.open(Rails.root.join("config", "tld_list.yaml"), "r") do |f|
 			YAML.load(f)
 		end
 		return tld_list
