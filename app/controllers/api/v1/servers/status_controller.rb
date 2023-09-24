@@ -1,5 +1,6 @@
 class Api::V1::Servers::StatusController < ApplicationController
 	require 'ipaddr'
+	require 'yaml'
 
 	class DeniedHostError < StandardError
 		def initialize msg="Request to this host is not allowed."
@@ -74,13 +75,18 @@ class Api::V1::Servers::StatusController < ApplicationController
 		raise ArgumentError unless _host.class == String
 		# TODO: fastly return with white list
 
-		is_ipaddr = _ip_address_filter_default _host
 		is_hostname = _host_name_filter_default _host
+		is_ipaddr = _ip_address_filter_default _host
 
-		raise ArgumentError, "given host is not IP address or correct host name." if !is_ipaddr && !is_hostname
+		raise ArgumentError, "given host is not IP address or correct hostname." if !is_ipaddr && !is_hostname
 	end
 
 	private def _host_name_filter_default _host
+		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+([a-zA-Z]{2,})$/.match _host.downcase
+		return false if _match.nil?
+
+		tld_list = get_tld_list()["tld"]
+		raise ArgumentError, "given TLD of hostname is not correct." unless tld_list.include? _match[1]
 		return true
 	end
 
@@ -94,5 +100,12 @@ class Api::V1::Servers::StatusController < ApplicationController
 			raise DeniedHostError if IPAddr.new(addr).include? _host_address
 		end
 		return true
+	end
+
+	private def get_tld_list
+		tld_list = open(Rails.root.join("config", "tld_list.yaml")) do |f|
+			YAML.load(f)
+		end
+		return tld_list
 	end
 end
