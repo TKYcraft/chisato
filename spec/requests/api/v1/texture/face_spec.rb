@@ -9,16 +9,18 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 
 				# Assert
 				expect(response).to have_http_status 200
+				expect(response.headers["Content-Type"]).to eq "image/png"
 			end
 		end
 
 		context "give name of none-exist user to params" do
-			it "success 200" do
+			it "not found 404" do
 				# Act
 				get api_v1_texture_face_path("0.png")
 
 				# Assert
-				expect(response).to have_http_status 200
+				expect(response).to have_http_status 404
+				expect(response.headers["Content-Type"]).to eq "image/png"
 			end
 		end
 
@@ -53,6 +55,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 
 				# Assert
 				expect(response.headers).to be_present
+				expect(response.headers["Content-Type"]).to eq "image/png"
 				expect(response.headers["Cache-Control"]).to include("public")
 				expect(response.headers["Cache-Control"]).to include("max-age=3600")
 			end
