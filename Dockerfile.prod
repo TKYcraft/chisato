@@ -1,3 +1,6 @@
+FROM tkycraft/ianatld2yaml:2023-09-26_04-27 as tld_list_maker
+RUN perl ianaTLD2yaml.pl
+
 FROM ruby:3.2.2-slim-bullseye
 
 WORKDIR /opt/app
@@ -13,6 +16,7 @@ RUN gem install rails -v 7.0.4 \
 	&& gem install bundler -v 2.4.12
 
 COPY ./ /opt/app/
+COPY --from=tld_list_maker /opt/app/tld_list.yaml /opt/app/config/tld_list.yaml
 
 ENV BUNDLE_WITHOUT development:test
 

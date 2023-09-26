@@ -1,7 +1,8 @@
 # for development
-tld:
-  - com
-  - jp
-  - dev
-  - click
-  - gov
+---
+TLD:
+  - COM
+  - JP
+  - DEV
+  - CLICK
+  - GOV
