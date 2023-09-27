@@ -19,7 +19,7 @@ module Minetools
 				raise FaceRequestError if @name.nil?
 				@uuid = get_minecraft_uuid(@name)
 				@skin_image_url = get_skin_image_url(@uuid)
-				@image = get_face_image(@skin_image_url)
+				@image = get_face_image(@skin_image_url, @size)
 				return
 			end
 
@@ -74,6 +74,7 @@ module Minetools
 				raise ArgumentError if skin_image_url == ""
 				raise ArgumentError unless size.kind_of? Integer
 				raise ArgumentError unless size%8==0
+				raise ArgumentError unless 8 <= size
 
 				image = Magick::Image.read(skin_image_url).first
 
