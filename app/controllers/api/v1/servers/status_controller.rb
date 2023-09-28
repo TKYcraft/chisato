@@ -92,8 +92,6 @@ class Api::V1::Servers::StatusController < ApplicationController
 		return true
 	end
 
-	[].map { |e|  }
-
 	private def _ip_address_filter_default _host
 		begin
 			_host_address = IPAddr.new(_host)
