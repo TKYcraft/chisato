@@ -86,7 +86,9 @@ class Api::V1::Servers::StatusController < ApplicationController
 		return false if _match.nil?
 
 		tld_list = App::Application.config.tld_list["TLD"]
-		raise ArgumentError, "given TLD of hostname is not correct." unless tld_list.map(&:upcase).include? _match[1]
+		unless tld_list.map{|i| i.to_s.upcase}.include? _match[1]
+			raise ArgumentError, "given TLD of hostname is not correct."
+		end
 		return true
 	end
 
