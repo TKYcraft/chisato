@@ -1,5 +1,6 @@
 class Api::V1::Texture::FaceController < ApplicationController
 	def show
+		@status = 200
 		@path = URI.parse(request.fullpath).path
 		unless File.extname(@path) == ".png"
 			render json: {message: "file extention must be .png"}, status: 400
@@ -18,15 +19,16 @@ class Api::V1::Texture::FaceController < ApplicationController
 			@image_bin = @face.image.to_blob
 		rescue => e
 			@image_bin = steve_face_image.to_blob
+			@status = 404
 		end
 
 		expires_in 1.hours, public: true   # cache-control header.
-		send_data @image_bin, type: "image/png", disposition: 'inline'
+		send_data @image_bin, type: "image/png", disposition: 'inline', status: @status
 	end
 
 	private def steve_face_image
 		@face = Minetools::FaceTool::Face.new size: @size
-		return @face.get_face_image(Rails.root.join('public', "steve.png").to_s)
+		return @face.get_face_image(Rails.root.join("app", "assets", "images", "steve.png").to_s)
 	end
 
 	private def params_size

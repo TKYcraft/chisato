@@ -82,11 +82,13 @@ class Api::V1::Servers::StatusController < ApplicationController
 	end
 
 	private def _host_name_filter_default _host
-		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.downcase
+		_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.upcase
 		return false if _match.nil?
 
-		tld_list = App::Application.config.tld_list["tld"]
-		raise ArgumentError, "given TLD of hostname is not correct." unless tld_list.include? _match[1]
+		tld_list = App::Application.config.tld_list["TLD"]
+		unless tld_list.map{|i| i.to_s.upcase}.include? _match[1]
+			raise ArgumentError, "given TLD of hostname is not correct."
+		end
 		return true
 	end
 
