@@ -17,7 +17,6 @@ class Api::V1::Texture::FaceController < ApplicationController
 			@face.request!
 			@image_bin = @face.image.to_blob
 		rescue => e
-			warn "[WARNING]: #{e.message}"
 			@image_bin = steve_face_image.to_blob
 		end
 

@@ -5,7 +5,15 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		context "give name of exist user to params" do
 			it "success 200" do
 				# Act
-				get api_v1_texture_face_path("KrisJelbring.png")
+				get api_v1_texture_face_path "KrisJelbring.png"
+
+				# Assert
+				expect(response).to have_http_status 200
+			end
+
+			it "success 200 with correct size params" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 256}
 
 				# Assert
 				expect(response).to have_http_status 200
@@ -43,6 +51,142 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				json = JSON.parse(response.body)
 				expect(response).to have_http_status 400
 				expect(json["message"]).to eq "file extention must be .png"
+			end
+		end
+
+		context "request with correct size parameter" do
+			it "returns success with size: 8" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 8}
+
+				# Assert
+				expect(response).to have_http_status 200
+			end
+
+			it "returns bad request 400 with size: 512" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 512}
+
+				# Assert
+				expect(response).to have_http_status 200
+			end
+
+			it "returns bad request 400 with size: 2048" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 2048}
+
+				# Assert
+				expect(response).to have_http_status 200
+			end
+
+			it "returns bad request 400 with size: nil" do
+				# Act on this pattern will get `/api/v1/texture/face/KrisJelbring.png.png?size`
+				get api_v1_texture_face_path "KrisJelbring.png", {size: nil}
+
+				# Assert
+				expect(response).to have_http_status 200
+			end
+		end
+
+		context "request with INCORRECT size parameter" do
+			it "returns bad request 400 with size: -8" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: -8}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: -1" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: -1}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 0" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 0}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 1" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 1}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 7" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 7}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 2049" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 2049}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 2056" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 2056}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: false" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: false}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: true" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: true}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
+			end
+
+			it "returns bad request 400 with size: 'string'" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {size: 'string'}
+
+				# Assert
+				json = JSON.parse(response.body)
+				expect(response).to have_http_status 400
+				expect(json["message"]).to eq "parameter size must be Integer (8 ~ size ~ 2048) and multiple of 8"
 			end
 		end
 
