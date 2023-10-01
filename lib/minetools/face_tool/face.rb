@@ -7,9 +7,10 @@ module Minetools
 
 		class Face
 			attr_reader :name, :uuid, :skin_image_url, :size, :image
-			def initialize options={name: nil, size: 512}
+			def initialize options={name: nil, size: nil}
 				@name = options[:name]
 				@size = options[:size]
+				@size = 512 if @size.nil?   # set default
 				@skin_image_url = nil
 				@uuid = nil
 				@image = nil
