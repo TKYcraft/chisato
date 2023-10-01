@@ -22,6 +22,6 @@ class Api::V1::Texture::FaceController < ApplicationController
 
 	private def steve_face_image
 		@face = Minetools::FaceTool::Face.new
-		return @face.get_face_image(Rails.root.join('public', "steve.png").to_s)
+		return @face.get_face_image(Rails.root.join("app", "assets", "images", "steve.png").to_s)
 	end
 end
