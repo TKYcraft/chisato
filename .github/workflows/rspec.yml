@@ -19,6 +19,6 @@ jobs:
         RAILS_ENV: test
     - name: exec rspec
       run:  |
-        docker-compose -f compose.yaml -f compose.rspec.yaml run app sh entrypoint-test.sh
+        docker-compose -f compose.yaml -f compose.rspec.yaml run app sh entrypoint_test.sh
       env:
         RAILS_ENV: test
