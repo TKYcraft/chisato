@@ -4,7 +4,7 @@ services:
       - RAILS_ENV=test
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.prod
     image: "tkycraft/mahirun:rspec1.0"
     depends_on: {}
     volumes: []
