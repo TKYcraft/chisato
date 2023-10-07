@@ -38,3 +38,16 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/chisato:${{ env.BUILD_DATETIME }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chisato:latest
+      -
+        name: discord notification
+        uses: docker://alicey/gha2discord:latest
+        env:
+            WEBHOOK_URL: ${{ secrets.DC_WEBHOOK_URL }}
+            MESSAGE_USERNAME: "GitHub Actions"
+            MESSAGE_AVATAR_URL: ""
+            MESSAGE_AUTHORNAME: "Chisato Docker Push"
+            MESSAGE_AUTHORICON_URL: ""
+            MESSAGE_COMMENT: "Image:\n${{ secrets.DOCKERHUB_USERNAME }}/chisato:${{ env.BUILD_DATETIME }}"
+        with:
+            entrypoint: "python3"
+            args: "/opt/app/app.py"
