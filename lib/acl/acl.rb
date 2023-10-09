@@ -23,7 +23,6 @@ module Acl
 
 		def initialize host=nil, tld_list=[]
 			raise ArgumentError unless host.class == String
-			raise ArgumentError unless tld_list.class == Array
 			raise ArgumentError unless is_tld_array? tld_list
 			@host = host
 			@tld_list = tld_list
@@ -33,7 +32,7 @@ module Acl
 			filter @host
 		end
 
-		def filter _host
+		private def filter _host
 			raise ArgumentError unless _host.class == String
 			# TODO: fastly return with white list
 
@@ -43,7 +42,7 @@ module Acl
 			raise ArgumentError, "given host is not IP address or correct hostname." if !is_ipaddr && !is_hostname
 		end
 
-		def _host_name_filter_default _host
+		private def _host_name_filter_default _host
 			_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.upcase
 			return false if _match.nil?
 
@@ -53,7 +52,7 @@ module Acl
 			return true
 		end
 
-		def _ip_address_filter_default _host
+		private def _ip_address_filter_default _host
 			begin
 				_host_address = IPAddr.new(_host)
 			rescue IPAddr::InvalidAddressError => e

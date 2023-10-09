@@ -3,13 +3,57 @@ require './lib/acl/acl.rb'
 
 RSpec.describe Acl::Acl do
 	it "is object of Acl::Acl class" do
-		acl = Acl::Acl.new "", App::Application.config.tld_list["TLD"]
+		acl = Acl::Acl.new "example.com", App::Application.config.tld_list["TLD"]
 		expect(acl.class).to eq(Acl::Acl)
 	end
 
 	describe "methods" do
 		describe "initialize()" do
-			
+			context "errors" do
+				context "host ArgumentError" do
+					it "raise error by host is number." do
+						expect{Acl::Acl.new 1, ["COM"]}.to raise_error ArgumentError
+					end
+
+					it "raise error by host is nil." do
+						expect{Acl::Acl.new nil, ["COM"]}.to raise_error ArgumentError
+					end
+
+					it "raise error by host is false." do
+						expect{Acl::Acl.new false, ["COM"]}.to raise_error ArgumentError
+					end
+
+					it "raise error by host is true." do
+						expect{Acl::Acl.new true, ["COM"]}.to raise_error ArgumentError
+					end
+				end
+
+				context "tld_list ArgumentError" do
+					it "raise error by tld_list is hash." do
+						expect{Acl::Acl.new "example.com", {"COM" => true}}.to raise_error ArgumentError
+					end
+
+					it "raise error by tld_list is nil." do
+						expect{Acl::Acl.new "example.com", nil}.to raise_error ArgumentError
+					end
+
+					it "raise error by tld_list is false." do
+						expect{Acl::Acl.new "example.com", false}.to raise_error ArgumentError
+					end
+
+					it "raise error by tld_list is true." do
+						expect{Acl::Acl.new "example.com", true}.to raise_error ArgumentError
+					end
+
+					it "raise error by tld_list is empty Array []." do
+						expect{Acl::Acl.new "example.com", []}.to raise_error ArgumentError
+					end
+
+					it "raise error by tld_list is Array of numbers." do
+						expect{Acl::Acl.new "example.com", [1,2,3]}.to raise_error ArgumentError
+					end
+				end
+			end
 		end
 
 		describe "filter!" do
