@@ -1,12 +1,13 @@
 class Api::V1::Servers::StatusController < ApplicationController
 	def index
+		@tld_list = App::Application.config.tld_list["TLD"]
 		@host = params[:host]
 		@port = nil
 		@port = params[:port].to_i unless params[:port].nil?
 
 		begin
 
-			@acl = Acl::Acl.new @host
+			@acl = Acl::Acl.new @host, @tld_list
 			@acl.filter!
 			@server = Minetools::ServerStatusTool::ServerStatus.new host: @host, port: @port
 			@server.fetch_status!

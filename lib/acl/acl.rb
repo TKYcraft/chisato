@@ -21,9 +21,12 @@ module Acl
 			"ff02::1",   # multicast on link local
 		].freeze
 
-		def initialize host=nil
+		def initialize host=nil, tld_list=[]
 			raise ArgumentError unless host.class == String
+			raise ArgumentError unless tld_list.class == Array
+			raise ArgumentError unless is_tld_array? tld_list
 			@host = host
+			@tld_list = tld_list
 		end
 
 		def filter!
@@ -44,8 +47,7 @@ module Acl
 			_match = /^(?:[a-zA-Z0-9][a-zA-Z0-9-]{,63}[a-zA-Z0-9]{,63}\.){,253}([a-zA-Z]{2,})$/.match _host.upcase
 			return false if _match.nil?
 
-			tld_list = App::Application.config.tld_list["TLD"]
-			unless tld_list.map{|i| i.to_s.upcase}.include? _match[1]
+			unless @tld_list.map{|i| i.to_s.upcase}.include? _match[1]
 				raise ArgumentError, "given TLD of hostname is not correct."
 			end
 			return true
@@ -59,6 +61,16 @@ module Acl
 			end
 			DENY_IP_ADDRESSES.each do |addr|
 				raise DeniedHostError if IPAddr.new(addr).include? _host_address
+			end
+			return true
+		end
+
+		private def is_tld_array? _array
+			return false unless _array.class == Array
+			return false if _array.size < 1
+			_array.each do |_tld|
+				# TODO: check simple domains or XN== domains or not.
+				return false unless _tld.class == String
 			end
 			return true
 		end
