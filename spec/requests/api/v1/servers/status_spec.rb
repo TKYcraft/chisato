@@ -17,7 +17,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 192.168.0.1" do
@@ -25,7 +25,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 192.168.255.254" do
@@ -33,7 +33,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 192.168.255.255" do
@@ -41,7 +41,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 192.168.24.10 (No reason)" do
@@ -49,7 +49,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 						end
 
@@ -59,7 +59,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 172.16.0.1" do
@@ -67,7 +67,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 172.31.255.254" do
@@ -75,7 +75,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 172.31.255.255" do
@@ -83,7 +83,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 172.24.1.24 (No reason)" do
@@ -91,7 +91,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 						end
 
@@ -101,7 +101,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 10.0.0.1" do
@@ -109,7 +109,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 10.255.255.254" do
@@ -117,7 +117,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 10.255.255.255" do
@@ -125,7 +125,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 
 							it "will deny with 10.10.192.31 (No reason)" do
@@ -133,7 +133,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 								json = JSON.parse response.body
 								expect(response).to have_http_status 400
-								expect(json["message"]).to eq "Request to this host is not allowed."
+								expect(json["message"]).to eq "given IP Address is not allowed length."
 							end
 						end
 					end
@@ -144,7 +144,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -154,7 +154,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 127.0.0.1" do
@@ -162,7 +162,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 127.255.255.254" do
@@ -170,7 +170,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 127.255.255.255" do
@@ -178,7 +178,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 127.0.0.53 (No reason)" do
@@ -186,7 +186,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -196,7 +196,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 169.254.0.1" do
@@ -204,7 +204,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 169.254.255.254" do
@@ -212,7 +212,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 169.254.255.255" do
@@ -220,7 +220,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 169.254.1.10 (No reason)" do
@@ -228,7 +228,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -238,7 +238,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 100.64.0.1" do
@@ -246,7 +246,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 100.127.255.254" do
@@ -254,7 +254,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 100.127.255.255" do
@@ -262,7 +262,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with 100.96.64.32" do
@@ -270,7 +270,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -280,7 +280,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -290,7 +290,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with fc00:0000:0000:0000:0000:0000:0000:0001" do
@@ -298,7 +298,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with fdff:ffff:ffff:ffff:ffff:ffff:ffff:fffe" do
@@ -306,7 +306,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff" do
@@ -314,7 +314,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with fd00:cafe:cafe:cafe:cafe:cafe:cafe:cafe (No reason)" do
@@ -322,7 +322,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -332,7 +332,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with fe80:0000:0000:0000:0000:0000:0000:0001" do
@@ -340,7 +340,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with febf:ffff:ffff:ffff:ffff:ffff:ffff:fffe" do
@@ -348,7 +348,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with febf:ffff:ffff:ffff:ffff:ffff:ffff:ffff" do
@@ -356,7 +356,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with febf:beef:beef:beef:beef:beef:beef:beef (No reason)" do
@@ -364,7 +364,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -374,7 +374,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with ff01:0000:0000:0000:0000:0000:0000:0001" do
@@ -382,7 +382,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 
@@ -392,7 +392,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 
 						it "will deny with ff02:0000:0000:0000:0000:0000:0000:0001" do
@@ -400,7 +400,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 
 							json = JSON.parse response.body
 							expect(response).to have_http_status 400
-							expect(json["message"]).to eq "Request to this host is not allowed."
+							expect(json["message"]).to eq "given IP Address is not allowed length."
 						end
 					end
 				end

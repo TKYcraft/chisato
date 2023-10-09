@@ -48,7 +48,7 @@ module Acl
 			return false if _match.nil?
 
 			unless @tld_list.map{|i| i.to_s.upcase}.include? _match[1]
-				raise ArgumentError, "given TLD of hostname is not correct."
+				raise DeniedHostError, "given TLD of hostname is not correct."
 			end
 			return true
 		end
@@ -60,7 +60,7 @@ module Acl
 				return false
 			end
 			DENY_IP_ADDRESSES.each do |addr|
-				raise DeniedHostError if IPAddr.new(addr).include? _host_address
+				raise DeniedHostError, "given IP Address is not allowed length." if IPAddr.new(addr).include? _host_address
 			end
 			return true
 		end
