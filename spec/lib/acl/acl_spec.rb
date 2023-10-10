@@ -420,3 +420,17 @@ RSpec.describe Acl::Acl do
 		end
 	end
 end
+
+RSpec.describe Acl::DeniedHostError do
+	it "raise error" do
+		expect{raise Acl::DeniedHostError}.to raise_error Acl::DeniedHostError
+	end
+
+	it "raise error with default message." do
+		expect{raise Acl::DeniedHostError}.to raise_error Acl::DeniedHostError, "Request to this host is not allowed."
+	end
+
+	it "raise error with custom message." do
+		expect{raise Acl::DeniedHostError, "foo"}.to raise_error Acl::DeniedHostError, "foo"
+	end
+end
