@@ -367,4 +367,56 @@ RSpec.describe Acl::Acl do
 			end
 		end
 	end
+
+	describe "CONST_VALUES" do
+		describe "DENY_IP_ADDRESSES" do
+			context "IPv4" do
+				it "contains 192.168.0.0/16" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("192.168.0.0/16")
+				end
+
+				it "contains 172.16.0.0/12" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("172.16.0.0/12")
+				end
+
+				it "contains 10.0.0.0/8" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("10.0.0.0/8")
+				end
+
+				it "contains 255.255.255.255 broadcast" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("255.255.255.255")
+				end
+
+				it "contains 127.0.0.0/8 loop back" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("127.0.0.0/8")
+				end
+
+				it "contains 169.254.0.0/16 link local" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("169.254.0.0/16")
+				end
+
+				it "contains 100.64.0.0/10 shared address space ref: RFC6890" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("100.64.0.0/10")
+				end
+			end
+
+			context "IPv6" do
+				it "contains ::1/128 loop back" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("::1/128")
+				end
+				it "contains fc00::/7 unique local" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("fc00::/7")
+				end
+				it "contains fe80::/10 link local" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("fe80::/10")
+				end
+				it "contains ff01::1 multicast on interface local" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("ff01::1")
+				end
+				it "contains ff02::1 multicast on link local" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("ff02::1")
+				end
+			end
+		end
+	end
 end
