@@ -47,7 +47,7 @@ docker compose down   # down containers.
         image: tkycraft/chisato:latest
         container_name: chisato-server
         ports:
-          - 80:3000
+          - 3000:3000
         environment:
           - SECRET_KEY_BASE={{  }}
           - RAILS_MASTER_KEY={{  }}
