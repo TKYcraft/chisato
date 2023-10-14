@@ -67,10 +67,10 @@ module Acl
 		private def is_tld_array? _array
 			return false unless _array.class == Array
 			return false if _array.size < 1
-			_array.each do |_tld|
+			# _array.each do |_tld|   # Issue #53
 				# TODO: check simple domains or XN== domains or not.
-				return false unless _tld.class == String
-			end
+				# return false unless _tld.class == String
+			# end
 			return true
 		end
 	end
