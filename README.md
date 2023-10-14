@@ -21,12 +21,13 @@ docker compose down   # down containers.
 * Ruby version : 3.2.2 (configure on Dockerfile, Gemfile)
 
 * Database creation / initialization
-  This is STATELESS API.
-
+  
+  * This API is not using RDB.
+  
 * How to run the test suite
 
   ```bash
-  docker exec -it mahirun-server bundle exec rspec
+  docker exec -it chisato-server bundle exec rspec
   # or exec bash
   ```
 
@@ -36,4 +37,20 @@ docker compose down   # down containers.
 
 * Deployment instructions
 
-  - This is not Production.
+  * Run [tkycraft/chisato:latest](https://hub.docker.com/r/tkycraft/chisato) (Docker Image).
+
+  * example of compose.yaml for Production Deployment.
+
+    ```yaml
+    services:
+      chisato-server:
+        image: tkycraft/chisato:latest
+        container_name: chisato-server
+        ports:
+          - 3000:3000
+        environment:
+          - SECRET_KEY_BASE={{  }}
+          - RAILS_MASTER_KEY={{  }}
+    ```
+
+
