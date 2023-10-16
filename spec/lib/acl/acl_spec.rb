@@ -49,8 +49,7 @@ RSpec.describe Acl::Acl do
 						expect{Acl::Acl.new "example.com", []}.to raise_error ArgumentError
 					end
 
-					xit "raise error by tld_list is Array of numbers." do
-						# Issue #53
+					it "raise error by tld_list is Array of numbers." do
 						expect{Acl::Acl.new "example.com", [1,2,3]}.to raise_error ArgumentError
 					end
 				end
