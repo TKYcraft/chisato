@@ -9,6 +9,8 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 
 				# Assert
 				expect(response).to have_http_status 200
+				expect(response.headers["Content-Type"]).to eq "image/png"
+				expect(response.headers["Access-Control-Allow-Origin"]).to eq "*"
 			end
 
 			it "success 200 with correct size params" do
