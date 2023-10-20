@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+	before_action :set_response_header
 
 	def render_status _status=500, _data={}, _messages=[]
 		# guard
@@ -41,5 +42,9 @@ class ApplicationController < ActionController::API
 		else
 			raise NotImplementedError
 		end
+	end
+
+	private def set_response_header
+		response.headers['Access-Control-Allow-Origin'] = "*"
 	end
 end
