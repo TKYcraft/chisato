@@ -5,6 +5,7 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 		# it "returns http success" do
 		# 	get api_v1_servers_status_index_path params: {host: ""}
 		# 	expect(response).to have_http_status(200)
+		#	expect(response.headers["Access-Control-Allow-Origin"]).to eq "*"
 		# end
 
 		context "parameters" do
