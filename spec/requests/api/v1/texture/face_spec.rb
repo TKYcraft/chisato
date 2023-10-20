@@ -10,7 +10,10 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				# Assert
 				expect(response).to have_http_status 200
 				expect(response.headers["Content-Type"]).to eq "image/png"
+
 				expect(response.headers["Access-Control-Allow-Origin"]).to eq "*"
+				expect(response.headers["Cache-Control"]).to include "max-age=3600"
+				expect(response.headers["Cache-Control"]).to include "public"
 			end
 
 			it "success 200 with correct size params" do
@@ -20,6 +23,44 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				# Assert
 				expect(response).to have_http_status 200
 				expect(response.headers["Content-Type"]).to eq "image/png"
+			end
+		end
+
+		context "give cache parameter" do
+			it "returns 200 with no-cache when giving cache=no" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {cache: "no"}
+
+				# Assert
+				expect(response).to have_http_status 200
+				expect(response.headers["Cache-Control"]).to include "no-cache"
+			end
+
+			it "returns public when giving cache=yes" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {cache: "yes"}
+
+				# Assert
+				expect(response).to have_http_status 200
+				expect(response.headers["Cache-Control"]).to include "public"
+			end
+
+			it "returns public when giving cache=false" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {cache: "false"}
+
+				# Assert
+				expect(response).to have_http_status 200
+				expect(response.headers["Cache-Control"]).to include "public"
+			end
+
+			it "returns public when giving cache=0" do
+				# Act
+				get api_v1_texture_face_path "KrisJelbring.png", {cache: "0"}
+
+				# Assert
+				expect(response).to have_http_status 200
+				expect(response.headers["Cache-Control"]).to include "public"
 			end
 		end
 

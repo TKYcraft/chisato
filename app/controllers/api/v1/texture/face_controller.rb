@@ -1,4 +1,6 @@
 class Api::V1::Texture::FaceController < ApplicationController
+	before_action :set_cache_control_header
+
 	def show
 		@status = 200
 		@path = URI.parse(request.fullpath).path
@@ -22,7 +24,6 @@ class Api::V1::Texture::FaceController < ApplicationController
 			@status = 404
 		end
 
-		expires_in 1.hours, public: true   # cache-control header.
 		send_data @image_bin, type: "image/png", disposition: 'inline', status: @status
 	end
 
@@ -36,5 +37,20 @@ class Api::V1::Texture::FaceController < ApplicationController
 		return false if /^[0-9]{1,4}$/.match(params[:size]).nil?
 		@s = params[:size].to_i
 		return 8 <= @s && @s <= 2048 && @s%8==0 ? @s : false
+	end
+
+	private def use_cache?
+		param = params[:cache]
+		return true if param.nil?
+		return false if param.downcase == "no"
+		return true
+	end
+
+	private def set_cache_control_header
+		if use_cache?
+			expires_in 1.hours, public: true
+		else
+			expires_now
+		end
 	end
 end
