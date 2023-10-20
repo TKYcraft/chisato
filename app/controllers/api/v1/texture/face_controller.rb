@@ -47,7 +47,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 	end
 
 	private def set_cache_control_header
-		if should_be_cached?
+		if use_cache?
 			expires_in 1.hours, public: true
 		else
 			expires_now
