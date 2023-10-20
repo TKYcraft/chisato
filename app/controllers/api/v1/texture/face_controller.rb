@@ -39,7 +39,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 		return 8 <= @s && @s <= 2048 && @s%8==0 ? @s : false
 	end
 
-	private def should_be_cached?
+	private def use_cache?
 		param = params[:cache]
 		return true if param.nil?
 		return false if param.downcase == "no"
