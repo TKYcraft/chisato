@@ -15,9 +15,8 @@ class Api::V1::Texture::FaceController < ApplicationController
 			return nil
 		end
 
-		@face = Minetools::FaceTool::Face.new name: params[:id], size: @size
 		begin
-			@face.request!
+			@face = request_face_image_of params[:id], @size
 			@image_bin = @face.image.to_blob
 		rescue => e
 			@image_bin = steve_face_image.to_blob
@@ -25,6 +24,12 @@ class Api::V1::Texture::FaceController < ApplicationController
 		end
 
 		send_data @image_bin, type: "image/png", disposition: 'inline', status: @status
+	end
+
+	private def request_face_image_of _name, _size
+		face = Minetools::FaceTool::Face.new name: _name, size: _size
+		face.request!
+		return face
 	end
 
 	private def steve_face_image
