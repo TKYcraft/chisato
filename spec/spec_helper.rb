@@ -54,9 +54,8 @@ RSpec.configure do |config|
   # metadata: `fit`, `fdescribe` and `fcontext`, respectively.
   if ENV['CI']
     config.before(focus: true) { raise "Don't use focus tag in CI." }
-  else
-    config.filter_run_when_matching :focus
   end
+  config.filter_run_when_matching :focus
 
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options. We recommend

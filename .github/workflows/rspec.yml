@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  RAILS_ENV: test
-  CI: true
-
 jobs:
   rspec:
     runs-on: ubuntu-latest
