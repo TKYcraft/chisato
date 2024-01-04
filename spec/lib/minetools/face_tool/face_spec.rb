@@ -50,11 +50,7 @@ RSpec.describe Minetools::FaceTool::Face do
 		describe "get_minecraft_uuid()" do
 			context "give correct name" do
 				before do
-					result = '{
-						"id" : "7125ba8b1c864508b92bb5c042ccfe2b",
-						"name" : "KrisJelbring"
-					}'
-					allow(face).to receive(:http_get).and_return(result)
+					allow(face).to receive(:http_get).and_return(uuid_api_response_sample)
 				end
 
 				it "returns currect uuid" do
@@ -106,11 +102,7 @@ RSpec.describe Minetools::FaceTool::Face do
 		describe "request_json()" do
 			context "give correct url" do
 				before do
-					result = '{
-						"id" : "7125ba8b1c864508b92bb5c042ccfe2b",
-						"name" : "KrisJelbring"
-					}'
-					allow(face).to receive(:http_get).and_return(result)
+					allow(face).to receive(:http_get).and_return(uuid_api_response_sample)
 				end
 
 				it "returns hash object" do
