@@ -28,7 +28,7 @@ RSpec.describe Minetools::FaceTool::Face do
 		# TODO: raise RuntimeError
 	end
 
-	it "is object of Minetools::FaceTool::Face class" do
+	fit "is object of Minetools::FaceTool::Face class" do
 		expect(face.class).to eq(described_class)
 	end
 
