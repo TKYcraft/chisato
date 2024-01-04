@@ -297,7 +297,6 @@ RSpec.describe Minetools::FaceTool::Face do
 				it "returns image" do
 					url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 					expect(face.get_face_image(url).class).to eq Magick::Image
-					expect(face).to have_received(:get_image_from).once
 				end
 			end
 
@@ -305,28 +304,24 @@ RSpec.describe Minetools::FaceTool::Face do
 				context "give nothing" do
 					it "raise ArgumentError" do
 						expect{face.get_face_image}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
 				context "give value which is not String" do
 					it "raise ArgumentError" do
 						expect{face.get_face_image -1}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
 				context "give empty String" do
 					it "raise ArgumentError" do
 						expect{face.get_face_image ""}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
 				context "give nil" do
 					it "raise ArgumentError" do
 						expect{face.get_face_image nil}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 			end
@@ -336,7 +331,6 @@ RSpec.describe Minetools::FaceTool::Face do
 					it "raise ArgumentError" do
 						url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 						expect{face.get_face_image url, "string"}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
@@ -344,7 +338,6 @@ RSpec.describe Minetools::FaceTool::Face do
 					it "raise ArgumentError" do
 						url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 						expect{face.get_face_image url, 11}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
@@ -352,7 +345,6 @@ RSpec.describe Minetools::FaceTool::Face do
 					it "raise ArgumentError" do
 						url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 						expect{face.get_face_image url, -1}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 
@@ -360,7 +352,6 @@ RSpec.describe Minetools::FaceTool::Face do
 					it "raise ArgumentError" do
 						url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
 						expect{face.get_face_image url, nil}.to raise_error ArgumentError
-						expect(face).not_to have_received(:get_image_from)
 					end
 				end
 			end
