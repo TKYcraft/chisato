@@ -18,7 +18,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				allow(mine_tools_face_mock).to receive(:image).and_return(skin_image_fixture)
 			end
 
-			fit "success 200" do
+			it "success 200" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png"
 
