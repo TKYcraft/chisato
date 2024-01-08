@@ -77,7 +77,7 @@ module Minetools
 				raise ArgumentError unless size%8==0
 				raise ArgumentError unless 8 <= size
 
-				image = Magick::Image.read(skin_image_url).first
+				image = get_image_from(skin_image_url)
 
 				_face = image.crop(8,8,8,8)   # crop face area.
 				_face.sample!(size,size)   # resize image.
@@ -88,6 +88,10 @@ module Minetools
 				return _face   # => Magick::Image
 			end
 
+			def get_image_from(_url)
+				Magick::Image.read(_url).first
+			end
+
 			def request_json _url=""
 				raise ArgumentError unless _url.kind_of? String
 				raise ArgumentError if _url == ""
@@ -95,7 +99,7 @@ module Minetools
 				parsed_uri = URI.parse(_url)
 
 				begin
-					data = Net::HTTP.get(parsed_uri)
+					data = http_get(parsed_uri)
 				rescue SocketError=> e
 					raise APIRequestError, e.message
 				rescue => e
@@ -113,6 +117,10 @@ module Minetools
 				end
 
 				return json
+			end
+
+			def http_get(_parsed_uri)
+				Net::HTTP.get(_parsed_uri)
 			end
 		end
 

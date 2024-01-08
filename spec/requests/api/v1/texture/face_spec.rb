@@ -1,8 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Texture::Faces", type: :request do
+	let(:mine_tools_face_mock){ instance_spy(Minetools::FaceTool::Face) }
+	let(:skin_image_fixture){ Magick::Image.read('./spec/fixtures/skin_image_fixture.png').first }
+
+	before do
+		allow(Minetools::FaceTool::Face).to receive(:new).and_return(mine_tools_face_mock)
+		allow(mine_tools_face_mock).to receive(:request!).and_raise RuntimeError
+		allow(mine_tools_face_mock).to receive(:image).and_raise RuntimeError
+		allow(mine_tools_face_mock).to receive(:get_face_image).and_raise RuntimeError
+	end
+
 	describe "show action" do
 		context "give name of exist user to params" do
+			before do
+				allow(mine_tools_face_mock).to receive(:request!).and_return(nil)
+				allow(mine_tools_face_mock).to receive(:image).and_return(skin_image_fixture)
+			end
+
 			it "success 200" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png"
@@ -27,6 +42,11 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		end
 
 		context "give cache parameter" do
+			before do
+				allow(mine_tools_face_mock).to receive(:request!).and_return(nil)
+				allow(mine_tools_face_mock).to receive(:image).and_return(skin_image_fixture)
+			end
+
 			it "returns 200 with no-cache when giving cache=no" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png", {cache: "no"}
@@ -65,6 +85,11 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		end
 
 		context "give name of none-exist user to params" do
+			before do
+				allow(mine_tools_face_mock).to receive(:request!).and_raise Minetools::FaceTool::GetUUIDError
+				allow(mine_tools_face_mock).to receive(:get_face_image).and_return skin_image_fixture
+			end
+
 			it "not found 404" do
 				# Act
 				get api_v1_texture_face_path("0.png")
@@ -100,6 +125,11 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		end
 
 		context "request with correct size parameter" do
+			before do
+				allow(mine_tools_face_mock).to receive(:request!).and_return(nil)
+				allow(mine_tools_face_mock).to receive(:image).and_return(skin_image_fixture)
+			end
+
 			it "returns success with size: 8" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png", {size: 8}
@@ -108,7 +138,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response).to have_http_status 200
 			end
 
-			it "returns bad request 400 with size: 512" do
+			it "returns success with size: 512" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png", {size: 512}
 
@@ -116,7 +146,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response).to have_http_status 200
 			end
 
-			it "returns bad request 400 with size: 2048" do
+			it "returns success with size: 2048" do
 				# Act
 				get api_v1_texture_face_path "KrisJelbring.png", {size: 2048}
 
@@ -124,8 +154,8 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response).to have_http_status 200
 			end
 
-			it "returns bad request 400 with size: nil" do
-				# Act on this pattern will get `/api/v1/texture/face/KrisJelbring.png.png?size`
+			it "returns success with size: nil" do
+				# Act on this pattern will get `/api/v1/texture/face/KrisJelbring.png?size`
 				get api_v1_texture_face_path "KrisJelbring.png", {size: nil}
 
 				# Assert
@@ -236,6 +266,11 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 		end
 
 		context "response headers" do
+			before do
+				allow(mine_tools_face_mock).to receive(:request!).and_return(nil)
+				allow(mine_tools_face_mock).to receive(:image).and_return(skin_image_fixture)
+			end
+
 			it "have correct cache-control" do
 				# Act
 				get api_v1_texture_face_path("KrisJelbring.png")
