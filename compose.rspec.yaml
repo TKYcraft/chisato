@@ -2,7 +2,7 @@ services:
   app:
     environment:
       - RAILS_ENV=test
-      - CI=true
+      - DISABLE_FOCUS_SPEC=true
     build:
       context: .
       dockerfile: ./Dockerfile.prod
