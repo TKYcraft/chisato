@@ -16,8 +16,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 		end
 
 		begin
-			@face = request_face_image_of params[:id], @size
-			@image_bin = @face.image.to_blob
+			@image_bin = request_face_image_of(params[:id], @size).to_blob
 		rescue => e
 			@image_bin = steve_face_image.to_blob
 			@status = 404
@@ -29,7 +28,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 	private def request_face_image_of _name, _size
 		face = Minetools::FaceTool::Face.new name: _name, size: _size
 		face.request!
-		return face
+		return face.image
 	end
 
 	private def steve_face_image
