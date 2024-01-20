@@ -18,8 +18,8 @@ RUN \
 
 # install rails / bundler
 RUN which gem \
-	&& gem install rails -v 7.0.4 \
-	&& gem install bundler -v 2.4.12 \
+	&& gem install rails -v 7.1.3 \
+	&& gem install bundler -v 2.5.5 \
 	&& rails -v
 
 COPY ./ /opt/app/
