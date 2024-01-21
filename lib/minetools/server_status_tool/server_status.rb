@@ -10,15 +10,20 @@ module Minetools
 				@port = options[:port]
 				@port = 25565 if @port.nil?   # default
 				@status = nil
+				@socket = nil
 
 				check_instance_variables! e=ArgumentError
+			end
+
+			def socket
+				@socket ||= TCPSocket.new(@host, @port, connect_timeout: 1)
 			end
 
 			def fetch_status
 				check_instance_variables!
 
 				begin
-					socket = TCPSocket.new(@host, @port, connect_timeout: 1)
+					socket
 				rescue SocketError => e
 					raise ServiceUnavailableError, e.message
 				rescue Errno::EADDRNOTAVAIL => e

@@ -2,6 +2,8 @@ require 'rails_helper'
 require './lib/minetools/server_status_tool/server_status.rb'
 
 RSpec.describe Minetools::ServerStatusTool::ServerStatus do
+	let(:socket_mock){ instance_spy TCPSocket }
+
 	it "is object of Minetools::ServerStatusTool::ServerStatus class" do
 		status = Minetools::ServerStatusTool::ServerStatus.new host: "minecraft.example.com"
 		expect(status.class).to eq(Minetools::ServerStatusTool::ServerStatus)
@@ -64,5 +66,31 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 				end
 			end
 		end
+
+		describe "fetch_status()"
+	end
+end
+
+RSpec.describe Minetools::ServerStatusTool::InstanceVariableError do
+	it "raise Minetools::ServerStatusTool::InstanceVariableError" do
+		expect{
+			raise described_class
+		}.to raise_error described_class
+	end
+end
+
+RSpec.describe Minetools::ServerStatusTool::ConnectionError do
+	it "raise Minetools::ServerStatusTool::ConnectionError" do
+		expect{
+			raise described_class
+		}.to raise_error described_class
+	end
+end
+
+RSpec.describe Minetools::ServerStatusTool::ServiceUnavailableError do
+	it "raise Minetools::ServerStatusTool::ServiceUnavailableError" do
+		expect{
+			raise described_class
+		}.to raise_error described_class
 	end
 end
