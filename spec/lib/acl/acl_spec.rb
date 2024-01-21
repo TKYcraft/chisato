@@ -59,6 +59,25 @@ RSpec.describe Acl::Acl do
 		describe "filter!" do
 			context "deny cases" do
 				context "deny cases by ip address" do
+					context "IPv4 this host" do
+						context "0.0.0.0/8" do
+							it "will deny with 0.0.0.0" do
+								acl = Acl::Acl.new "0.0.0.0", ["COM"]
+								expect{acl.filter!}.to raise_error Acl::DeniedHostError, "given IP Address is not allowed length."
+							end
+
+							it "will deny with 0.255.255.255" do
+								acl = Acl::Acl.new "0.255.255.255", ["COM"]
+								expect{acl.filter!}.to raise_error Acl::DeniedHostError, "given IP Address is not allowed length."
+							end
+
+							it "will deny with 0.0.0.1" do
+								acl = Acl::Acl.new "0.0.0.1", ["COM"]
+								expect{acl.filter!}.to raise_error Acl::DeniedHostError, "given IP Address is not allowed length."
+							end
+						end
+					end
+
 					context "IPv4 local addresses" do
 						context "192.168.x.x" do
 							it "will deny with 192.168.0.0" do
@@ -371,6 +390,10 @@ RSpec.describe Acl::Acl do
 	describe "CONST_VALUES" do
 		describe "DENY_IP_ADDRESSES" do
 			context "IPv4" do
+				it "contains 0.0.0.0/8" do
+					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("0.0.0.0/8")
+				end
+
 				it "contains 192.168.0.0/16" do
 					expect(Acl::Acl::DENY_IP_ADDRESSES).to include("192.168.0.0/16")
 				end

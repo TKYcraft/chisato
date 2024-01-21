@@ -5,6 +5,7 @@ module Acl
 
 		DENY_IP_ADDRESSES = [
 			# IPv4
+			"0.0.0.0/8",   # This host on this network
 			"192.168.0.0/16",
 			"172.16.0.0/12",
 			"10.0.0.0/8",
