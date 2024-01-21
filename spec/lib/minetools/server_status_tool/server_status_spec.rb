@@ -2,11 +2,12 @@ require 'rails_helper'
 require './lib/minetools/server_status_tool/server_status.rb'
 
 RSpec.describe Minetools::ServerStatusTool::ServerStatus do
+	let(:server_status) { described_class.new host: "minecraft.example.com" }
 	let(:socket_mock){ instance_spy TCPSocket }
 
 	it "is object of Minetools::ServerStatusTool::ServerStatus class" do
-		status = Minetools::ServerStatusTool::ServerStatus.new host: "minecraft.example.com"
-		expect(status.class).to eq(Minetools::ServerStatusTool::ServerStatus)
+		server_status
+		expect(server_status.class).to eq(described_class)
 	end
 
 	describe "methods" do
@@ -14,8 +15,8 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 			context "give correct only hostname" do
 				it "set instance variables" do
 					_h = "minecraft.example.com"
-					server = Minetools::ServerStatusTool::ServerStatus.new host: _h
-					expect(server.host).to eq _h
+					server_status = described_class.new host: _h
+					expect(server_status.host).to eq _h
 				end
 			end
 
@@ -24,10 +25,10 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					_h = "minecraft.example.com"
 					_p = 25567
 
-					server = Minetools::ServerStatusTool::ServerStatus.new host: _h, port: _p
+					server_status = described_class.new host: _h, port: _p
 
-					expect(server.host).to eq _h
-					expect(server.port).to eq _p
+					expect(server_status.host).to eq _h
+					expect(server_status.port).to eq _p
 				end
 			end
 
@@ -35,7 +36,7 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 				it "raise ArgumentError with non-string" do
 					_h = true
 					expect{
-						server = Minetools::ServerStatusTool::ServerStatus.new host: _h
+						described_class.new host: _h
 					}.to raise_error ArgumentError
 				end
 			end
@@ -45,7 +46,7 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					_h = "minecraft.example.com"
 					_p = -1
 					expect{
-						server = Minetools::ServerStatusTool::ServerStatus.new host: _h, port: _p
+						described_class.new host: _h, port: _p
 					}.to raise_error ArgumentError
 				end
 
@@ -53,7 +54,7 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					_h = "minecraft.example.com"
 					_p = 65536
 					expect{
-						server = Minetools::ServerStatusTool::ServerStatus.new host: _h, port: _p
+						described_class.new host: _h, port: _p
 					}.to raise_error ArgumentError
 				end
 
@@ -61,13 +62,14 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					_h = "minecraft.example.com"
 					_p = "25565"
 					expect{
-						server = Minetools::ServerStatusTool::ServerStatus.new host: _h, port: _p
+						described_class.new host: _h, port: _p
 					}.to raise_error ArgumentError
 				end
 			end
 		end
 
-		describe "fetch_status()"
+		describe "fetch_status()" do
+		end
 	end
 end
 
