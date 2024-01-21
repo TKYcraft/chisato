@@ -21,18 +21,7 @@ module Minetools
 
 			def fetch_status
 				check_instance_variables!
-
-				begin
-					socket
-				rescue SocketError => e
-					raise ServiceUnavailableError, e.message
-				rescue Errno::EADDRNOTAVAIL => e
-					raise ServiceUnavailableError, e.message
-				rescue Errno::ECONNREFUSED => e
-					raise ConnectionError, e.message
-				rescue => e
-					raise ConnectionError
-				end
+				socket
 
 				handshake_packet = generate_handshake_packet()
 				socket.write([handshake_packet.length].pack('C') + handshake_packet)
@@ -41,21 +30,9 @@ module Minetools
 				socket.write([status_request_packet.length].pack('C') + status_request_packet)
 
 				payload = ""
-				header = ""
+				# header = ""
 				# packet_length = nil
 				# packet_id = nil
-
-				loop{   # get head of packet.
-					begin
-						char = socket.readchar
-						break if char == "{"
-						header << char
-					rescue => e
-						warn e
-						warn e.message
-						raise e
-					end
-				}
 
 				# # split header to length and packet id
 				# for num in 0...header.length do   
@@ -65,29 +42,39 @@ module Minetools
 				# 	end
 				# end
 
+				loop{   # get head of packet.
+					char = socket.readchar
+					break if char == "{"
+				}
 				payload << "{"
+
+
 				depth = 1
 				loop{   # get payload of packet.
-					begin
-						char = socket.readchar
-						depth += 1 if char == "{"
-						depth -= 1 if char == "}"
-						break if depth == 0
-						payload << char
-					rescue EOFError => e
-						raise ConnectionError, "Minecraft server returns unexpected EOF."
-					rescue => e
-						warn e
-						warn e.message
-						raise e
-					end
+					char = socket.readchar
+					depth += 1 if char == "{"
+					depth -= 1 if char == "}"
+					payload << char
+					break if depth == 0
 				}
-				payload << "}"
 				socket.close
 
 				data = payload.force_encoding('UTF-8').encode
 				json = JSON.parse(data)
 				return json
+
+			rescue SocketError => e
+				raise ServiceUnavailableError, e.message
+			rescue Errno::EADDRNOTAVAIL => e
+				raise ServiceUnavailableError, e.message
+			rescue Errno::ECONNREFUSED => e
+				raise ConnectionError, e.message
+			rescue EOFError => e
+				raise ConnectionError, "Minecraft server returns unexpected EOF."
+			rescue JSON::ParserError
+				raise ConnectionError, "Minecraft server returns unexpected tokens as JSON."
+			rescue => e
+				raise ConnectionError
 			end
 
 			def fetch_status!

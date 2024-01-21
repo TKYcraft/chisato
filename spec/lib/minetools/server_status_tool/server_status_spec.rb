@@ -2,12 +2,12 @@ require 'rails_helper'
 require './lib/minetools/server_status_tool/server_status.rb'
 
 RSpec.describe Minetools::ServerStatusTool::ServerStatus do
-	let(:server_status) { described_class.new host: "minecraft.example.com" }
+	let(:server) { described_class.new host: "minecraft.example.com" }
 	let(:socket_mock){ instance_spy TCPSocket }
 
 	it "is object of Minetools::ServerStatusTool::ServerStatus class" do
-		server_status
-		expect(server_status.class).to eq(described_class)
+		server
+		expect(server.class).to eq(described_class)
 	end
 
 	describe "methods" do
@@ -15,8 +15,8 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 			context "give correct only hostname" do
 				it "set instance variables" do
 					_h = "minecraft.example.com"
-					server_status = described_class.new host: _h
-					expect(server_status.host).to eq _h
+					server = described_class.new host: _h
+					expect(server.host).to eq _h
 				end
 			end
 
@@ -25,10 +25,10 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					_h = "minecraft.example.com"
 					_p = 25567
 
-					server_status = described_class.new host: _h, port: _p
+					server = described_class.new host: _h, port: _p
 
-					expect(server_status.host).to eq _h
-					expect(server_status.port).to eq _p
+					expect(server.host).to eq _h
+					expect(server.port).to eq _p
 				end
 			end
 
@@ -69,6 +69,109 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 		end
 
 		describe "fetch_status()" do
+			before do
+				allow(server).to receive(:socket)
+			end
+
+			context "create socket instance and get connection" do
+				context "when TCPSocket raises SocketError" do
+					before do
+						allow(server).to receive(:socket).and_raise SocketError
+					end
+
+					it "raise ServiceUnavailableError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ServiceUnavailableError
+					end
+				end
+
+				context "when TCPSocket raises Errno::EADDRNOTAVAIL" do
+					before do
+						allow(server).to receive(:socket).and_raise Errno::EADDRNOTAVAIL
+					end
+
+					it "raise ServiceUnavailableError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ServiceUnavailableError
+					end
+				end
+
+				context "when TCPSocket raises Errno::ECONNREFUSED" do
+					before do
+						allow(server).to receive(:socket).and_raise Errno::ECONNREFUSED
+					end
+
+					it "raise ServiceUnavailableError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ConnectionError
+					end
+				end
+
+				context "when TCPSocket raises another Error" do
+					before do
+						allow(server).to receive(:socket).and_raise RuntimeError
+					end
+
+					it "raise ServiceUnavailableError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ConnectionError
+					end
+				end
+			end
+
+			context "get characters" do
+				before do
+					allow(server).to receive(:socket).and_return socket_mock
+					allow(socket_mock).to receive(:write).and_raise RuntimeError
+					allow(socket_mock).to receive(:readchar).and_raise RuntimeError
+				end
+
+				context "socket raises Error when sending packet." do
+					context "Errno::ECONNREFUSED" do
+						before do
+							allow(socket_mock).to receive(:write).and_raise Errno::ECONNREFUSED
+						end
+
+						it "raise Minetools::ServerStatusTool::ConnectionError" do
+							expect{
+								server.fetch_status()
+							}.to raise_error Minetools::ServerStatusTool::ConnectionError
+						end
+					end
+				end
+
+				context "socket raises EOFError when reading packet." do
+					before do
+						allow(socket_mock).to receive(:write).and_return nil
+						allow(socket_mock).to receive(:readchar).and_raise EOFError
+					end
+
+					it "raise Minetools::ServerStatusTool::ConnectionError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ConnectionError
+					end
+				end
+
+				context "JSON parser raises JSON::ParserError" do
+					before do
+						allow(socket_mock).to receive(:write).and_return nil
+						allow(socket_mock).to receive(:readchar).and_return "{", "}"
+						allow(socket_mock).to receive(:close).and_return nil
+						allow(JSON).to receive(:parse).and_raise JSON::ParserError
+					end
+
+					it "raise Minetools::ServerStatusTool::ConnectionError" do
+						expect{
+							server.fetch_status()
+						}.to raise_error Minetools::ServerStatusTool::ConnectionError
+					end
+				end
+			end
 		end
 	end
 end
