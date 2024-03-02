@@ -30,7 +30,7 @@ module Minetools
 				socket.write([status_request_packet.length].pack('C') + status_request_packet)
 
 				payload = ""
-				# header = ""
+				header = ""
 				# packet_length = nil
 				# packet_id = nil
 
@@ -42,8 +42,9 @@ module Minetools
 				# 	end
 				# end
 
-				loop{   # get head of packet.
+				loop{   # drop head of packet.
 					char = socket.readchar
+					header += char
 					break if char == "{"
 				}
 				payload << "{"

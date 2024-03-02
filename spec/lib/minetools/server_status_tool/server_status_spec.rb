@@ -73,6 +73,83 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 				allow(server).to receive(:socket)
 			end
 
+			context "correct case" do
+				let(:expected_payload){
+					{
+						version: {
+							name: "Spigot 1.20.1",
+							protocol: 763
+						},
+						players: {
+							max: 15,
+							online: 1,
+							sample: [{
+								name: "example",
+								id: "cafecafe-cafe1234"
+							}]
+						},
+						description: {
+							extra: [
+								{text: "Example Server Message."}
+							],
+							text: ""
+						},
+						favicon: "data: image/png;base64,SampleBase64Characters",
+						modinfo: {
+							type: "FML",
+							modList: []
+						}
+					}.freeze
+				}
+
+				let(:characters){
+					("??" + expected_payload.to_json())
+						.gsub("\t", "").gsub("\n", "").split("")
+				}
+
+				before do
+					allow(server).to receive(:socket).and_return socket_mock
+					allow(socket_mock).to receive(:write).and_return nil
+					allow(socket_mock).to receive(:readchar).and_return *characters
+				end
+
+				it "returns hash object" do
+					res = server.fetch_status
+					expect(res.class).to eq Hash
+
+					# version
+					expect(res["version"]).to be_present
+					expect(res["version"]["name"]).to eq expected_payload[:version][:name]
+					expect(res["version"]["protocol"]).to eq expected_payload[:version][:protocol]
+
+					# players
+					expect(res["players"]).to be_present
+					expect(res["players"]["max"]).to eq expected_payload[:players][:max]
+					expect(res["players"]["online"]).to eq expected_payload[:players][:online]
+
+					# player sample
+					expect(res["players"]["sample"]).to be_present
+					res_p_sample = res["players"]["sample"]
+					exp_p_sample = expected_payload[:players][:sample]
+
+					expect(res_p_sample.first["name"]).to eq exp_p_sample.first[:name]
+					expect(res_p_sample.first["id"]).to eq exp_p_sample.first[:id]
+
+					# description
+					expect(res["description"]).to be_present
+					expect(res["description"]["extra"].first["text"]).to eq expected_payload[:description][:extra].first[:text]
+					expect(res["description"]["text"]).to eq expected_payload[:description][:text]
+
+					# favicon
+					expect(res["favicon"]).to eq expected_payload[:favicon]
+
+					# modinfo
+					expect(res["modinfo"]).to be_present
+					expect(res["modinfo"]["type"]).to eq expected_payload[:modinfo][:type]
+					expect(res["modinfo"]["modList"]).to eq expected_payload[:modinfo][:modList]
+				end
+			end
+
 			context "create socket instance and get connection" do
 				context "when TCPSocket raises SocketError" do
 					before do
