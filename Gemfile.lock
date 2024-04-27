@@ -185,7 +185,7 @@ GEM
       psych (>= 4.0.0)
     reline (0.4.3)
       io-console (~> 0.5)
-    rmagick (5.4.4)
+    rmagick (5.5.0)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec-core (3.12.3)
