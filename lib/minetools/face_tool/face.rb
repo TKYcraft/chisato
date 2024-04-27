@@ -4,20 +4,27 @@ module Minetools
 		require 'uri'
 		require "json"
 		require 'base64'
+		require "logger"
 
 		class Face
 			attr_reader :name, :uuid, :skin_image_url, :size, :image
-			def initialize options={name: nil, size: nil}
+			def initialize options={name: nil, size: nil, logger: nil}
 				@name = options[:name]
 				@size = options[:size]
 				@size = 512 if @size.nil?   # set default
+				@logger = options[:logger] || Logger.new($stdout)
 				@skin_image_url = nil
 				@uuid = nil
 				@image = nil
 			end
 
 			def request!
-				raise FaceRequestError if @name.nil?
+				if @name.nil?
+					msg = "Face at #{__LINE__}, Not given name."
+					@logger.error(msg)
+					raise FaceRequestError, msg
+				end
+
 				@uuid = get_minecraft_uuid(@name)
 				@skin_image_url = get_skin_image_url(@uuid)
 				@image = get_face_image(@skin_image_url, @size)
@@ -29,8 +36,12 @@ module Minetools
 				raise ArgumentError if name == ""
 
 				_json = request_json("https://api.mojang.com/users/profiles/minecraft/#{name}")
-				raise GetUUIDError, "this user name is not exist." unless _json["errorMessage"].nil?
-				# TODO: include API errorMessage to Exception message.
+
+				unless _json["errorMessage"].nil?
+					msg = "Face at #{__LINE__}, This User name is not exist. #{_json["errorMessage"]}."
+					@logger.error(msg)
+					raise GetUUIDError, msg
+				end
 
 				return _json["id"]
 			end
@@ -40,17 +51,25 @@ module Minetools
 				raise ArgumentError if uuid == ""
 				
 				_json = request_json("https://sessionserver.mojang.com/session/minecraft/profile/#{uuid}")
-				raise GetProfileError, "this uuid is invalid. #{_json["errorMessage"]}" unless _json["errorMessage"].nil?
+
+				unless _json["errorMessage"].nil?
+					msg = "Face at #{__LINE__}, This uuid is invalid. #{_json["errorMessage"]}."
+					@logger.error(msg)
+					raise GetProfileError, msg
+				end
 
 				_json_str = Base64.decode64(_json["properties"].first["value"])
 				begin
 					_json["properties"].first["value"] = JSON.parse(_json_str)
 					# TODO: check case of including element"s" on _json["properties"] .
 				rescue JSON::ParserError => e
-					raise GetProfileError, e.message
+					msg = "Face at #{__LINE__}, JSON::ParserError: #{e.message}."
+					@logger.error(msg)
+					raise GetProfileError, msg
 				rescue => e
-					warn e.message
-					raise GetProfileError, e.message
+					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}."
+					@logger.error(msg)
+					raise GetProfileError, msg
 				end
 				return _json
 			end
@@ -66,7 +85,12 @@ module Minetools
 					.try(:[], "textures")
 					.try(:[], "SKIN")
 					.try(:[], "url")
-				raise GetSkinUrlError, "there is no skin url." if _url.nil?
+
+				if _url.nil?
+					msg = "Face at #{__LINE__}, There is no skin url."
+					@logger.error(msg)
+					raise GetSkinUrlError, msg
+				end
 				return _url
 			end
 
@@ -101,19 +125,25 @@ module Minetools
 				begin
 					data = http_get(parsed_uri)
 				rescue SocketError=> e
-					raise APIRequestError, e.message
+					msg = "Face at #{__LINE__}, SocketError: #{e.message}"
+					@logger.error(msg)
+					raise APIRequestError, msg
 				rescue => e
-					warn e.message
-					raise APIRequestError, e.message
+					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}"
+					@logger.error(msg)
+					raise APIRequestError, msg
 				end
 
 				begin
 					json = JSON.parse(data)
 				rescue JSON::ParserError => e
-					raise APIRequestError, e.message
+					msg = "Face at #{__LINE__}, JSON::ParserError: #{e.message}"
+					@logger.error(msg)
+					raise APIRequestError, msg
 				rescue => e
-					warn e.message
-					raise APIRequestError, e.message
+					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}"
+					@logger.error(msg)
+					raise APIRequestError, msg
 				end
 
 				return json
