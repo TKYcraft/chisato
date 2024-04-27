@@ -38,7 +38,7 @@ module Minetools
 				_json = request_json("https://api.mojang.com/users/profiles/minecraft/#{name}")
 
 				unless _json["errorMessage"].nil?
-					msg = "Face at #{__LINE__}, This User name is not exist. #{_json["errorMessage"]}."
+					msg = "Face at #{__LINE__}, This User name is not exist."
 					@logger.error(msg)
 					raise GetUUIDError, msg
 				end
@@ -53,7 +53,7 @@ module Minetools
 				_json = request_json("https://sessionserver.mojang.com/session/minecraft/profile/#{uuid}")
 
 				unless _json["errorMessage"].nil?
-					msg = "Face at #{__LINE__}, This uuid is invalid. #{_json["errorMessage"]}."
+					msg = "Face at #{__LINE__}, This uuid is invalid."
 					@logger.error(msg)
 					raise GetProfileError, msg
 				end
