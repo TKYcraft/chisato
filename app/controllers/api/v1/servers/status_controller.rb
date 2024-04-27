@@ -9,7 +9,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 
 			@acl = Acl::Acl.new @host, @tld_list
 			@acl.filter!
-			@server = Minetools::ServerStatusTool::ServerStatus.new host: @host, port: @port
+			@server = Minetools::ServerStatusTool::ServerStatus.new host: @host, port: @port, logger: logger
 			@server.fetch_status!
 
 		rescue ArgumentError => e
