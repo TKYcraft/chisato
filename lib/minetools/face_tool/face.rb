@@ -19,10 +19,7 @@ module Minetools
 			end
 
 			def request!
-				if @name.nil?
-					raise FaceRequestError, "Not given name."
-				end
-
+				raise FaceRequestError, "Not given name." if @name.nil?
 				@uuid = get_minecraft_uuid(@name)
 				@skin_image_url = get_skin_image_url(@uuid)
 				@image = get_face_image(@skin_image_url, @size)
@@ -34,11 +31,7 @@ module Minetools
 				raise ArgumentError if name == ""
 
 				_json = request_json("https://api.mojang.com/users/profiles/minecraft/#{name}")
-
-				unless _json["errorMessage"].nil?
-					raise GetUUIDError, "This User name is not exist."
-				end
-
+				raise GetUUIDError, "This User name is not exist." unless _json["errorMessage"].nil?
 				return _json["id"]
 			end
 
@@ -47,10 +40,7 @@ module Minetools
 				raise ArgumentError if uuid == ""
 				
 				_json = request_json("https://sessionserver.mojang.com/session/minecraft/profile/#{uuid}")
-
-				unless _json["errorMessage"].nil?
-					raise GetProfileError, "This uuid is invalid."
-				end
+				raise GetProfileError, "This uuid is invalid." unless _json["errorMessage"].nil?
 
 				_json_str = Base64.decode64(_json["properties"].first["value"])
 				begin
@@ -75,10 +65,8 @@ module Minetools
 					.try(:[], "textures")
 					.try(:[], "SKIN")
 					.try(:[], "url")
+				raise GetSkinUrlError, "There is no skin url." if _url.nil?
 
-				if _url.nil?
-					raise GetSkinUrlError, "There is no skin url."
-				end
 				return _url
 			end
 

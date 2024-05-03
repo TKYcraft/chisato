@@ -394,9 +394,6 @@ RSpec.describe Minetools::FaceTool::Face do
 			end
 
 			context "not set name to instance" do
-				before do
-				end
-
 				it "raise FaceRequestError" do
 					face = described_class.new logger: logger_mock
 					expect{face.request!}.to raise_error Minetools::FaceTool::FaceRequestError
