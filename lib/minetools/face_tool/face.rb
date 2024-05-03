@@ -20,9 +20,7 @@ module Minetools
 
 			def request!
 				if @name.nil?
-					msg = "Face at #{__LINE__}, Not given name."
-					@logger.error(msg)
-					raise FaceRequestError, msg
+					raise FaceRequestError, "Not given name."
 				end
 
 				@uuid = get_minecraft_uuid(@name)
@@ -38,9 +36,7 @@ module Minetools
 				_json = request_json("https://api.mojang.com/users/profiles/minecraft/#{name}")
 
 				unless _json["errorMessage"].nil?
-					msg = "Face at #{__LINE__}, This User name is not exist."
-					@logger.error(msg)
-					raise GetUUIDError, msg
+					raise GetUUIDError, "This User name is not exist."
 				end
 
 				return _json["id"]
@@ -53,9 +49,7 @@ module Minetools
 				_json = request_json("https://sessionserver.mojang.com/session/minecraft/profile/#{uuid}")
 
 				unless _json["errorMessage"].nil?
-					msg = "Face at #{__LINE__}, This uuid is invalid."
-					@logger.error(msg)
-					raise GetProfileError, msg
+					raise GetProfileError, "This uuid is invalid."
 				end
 
 				_json_str = Base64.decode64(_json["properties"].first["value"])
@@ -63,13 +57,9 @@ module Minetools
 					_json["properties"].first["value"] = JSON.parse(_json_str)
 					# TODO: check case of including element"s" on _json["properties"] .
 				rescue JSON::ParserError => e
-					msg = "Face at #{__LINE__}, JSON::ParserError: #{e.message}."
-					@logger.error(msg)
-					raise GetProfileError, msg
+					raise GetProfileError, e.message
 				rescue => e
-					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}."
-					@logger.error(msg)
-					raise GetProfileError, msg
+					raise GetProfileError, "!! #{e.message}"
 				end
 				return _json
 			end
@@ -87,9 +77,7 @@ module Minetools
 					.try(:[], "url")
 
 				if _url.nil?
-					msg = "Face at #{__LINE__}, There is no skin url."
-					@logger.error(msg)
-					raise GetSkinUrlError, msg
+					raise GetSkinUrlError, "There is no skin url."
 				end
 				return _url
 			end
@@ -125,25 +113,17 @@ module Minetools
 				begin
 					data = http_get(parsed_uri)
 				rescue SocketError=> e
-					msg = "Face at #{__LINE__}, SocketError: #{e.message}"
-					@logger.error(msg)
-					raise APIRequestError, msg
+					raise APIRequestError, e.message
 				rescue => e
-					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}"
-					@logger.error(msg)
-					raise APIRequestError, msg
+					raise APIRequestError, "!! #{e.message}"
 				end
 
 				begin
 					json = JSON.parse(data)
 				rescue JSON::ParserError => e
-					msg = "Face at #{__LINE__}, JSON::ParserError: #{e.message}"
-					@logger.error(msg)
-					raise APIRequestError, msg
+					raise APIRequestError, e.message
 				rescue => e
-					msg = "Face at #{__LINE__}, Unexpected #{e.to_s}: #{e.message}"
-					@logger.error(msg)
-					raise APIRequestError, msg
+					raise APIRequestError, "!! #{e.message}"
 				end
 
 				return json

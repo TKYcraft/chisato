@@ -28,8 +28,6 @@ RSpec.describe Minetools::FaceTool::Face do
 		allow(face).to receive(:http_get).and_raise RuntimeError
 		allow(face).to receive(:get_image_from).and_raise RuntimeError
 		# TODO: raise RuntimeError
-
-		allow(logger_mock).to receive(:error).and_raise RuntimeError
 	end
 
 	it "is object of Minetools::FaceTool::Face class" do
@@ -85,13 +83,11 @@ RSpec.describe Minetools::FaceTool::Face do
 						"errorMessage" : "Couldn\'t find any profile with name !!!"
 					}'
 					allow(face).to receive(:http_get).and_return(result)
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise GetUUIDError" do
 					# Can't get '!!!' as user name of minecraft.
 					expect{face.get_minecraft_uuid '!!!'}.to raise_error(Minetools::FaceTool::GetUUIDError)
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 
@@ -159,12 +155,10 @@ RSpec.describe Minetools::FaceTool::Face do
 			context "give url which is non-exists site" do
 				before do
 					allow(face).to receive(:http_get).and_raise(SocketError)
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise APIRequestError" do
 					expect{face.request_json "https://example.example.com/"}.to raise_error(Minetools::FaceTool::APIRequestError)
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 
@@ -172,12 +166,10 @@ RSpec.describe Minetools::FaceTool::Face do
 				before do
 					result = '<h1>Hello World!</h1>'
 					allow(face).to receive(:http_get).and_return(result)
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise APIRequestError" do
 					expect{face.request_json "https://example.com/"}.to raise_error(Minetools::FaceTool::APIRequestError)
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 		end
@@ -218,12 +210,10 @@ RSpec.describe Minetools::FaceTool::Face do
 						"errorMessage" : "Not a valid UUID: foo"
 					}'
 					allow(face).to receive(:http_get).and_return(result)
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise GetProfileError" do
 					expect{face.get_minecraft_profile "foo"}.to raise_error(Minetools::FaceTool::GetProfileError)
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 
@@ -273,12 +263,10 @@ RSpec.describe Minetools::FaceTool::Face do
 						"errorMessage" : "Not a valid UUID: foo"
 					}'
 					allow(face).to receive(:http_get).and_return(result)
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise GetProfileError" do
 					expect{face.get_minecraft_profile "foo"}.to raise_error(Minetools::FaceTool::GetProfileError)
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 
@@ -407,13 +395,11 @@ RSpec.describe Minetools::FaceTool::Face do
 
 			context "not set name to instance" do
 				before do
-					allow(logger_mock).to receive(:error).and_return nil
 				end
 
 				it "raise FaceRequestError" do
 					face = described_class.new logger: logger_mock
 					expect{face.request!}.to raise_error Minetools::FaceTool::FaceRequestError
-					expect(logger_mock).to have_received(:error).once
 				end
 			end
 		end

@@ -66,25 +66,17 @@ module Minetools
 				return json
 
 			rescue SocketError => e
-				@logger.error("ServerStatus at #{__LINE__}, #{e.to_s}: #{e.message}")
 				raise ServiceUnavailableError, e.message
 			rescue Errno::EADDRNOTAVAIL => e
-				@logger.error("ServerStatus at #{__LINE__}, #{e.to_s}: #{e.message}")
 				raise ServiceUnavailableError, e.message
 			rescue Errno::ECONNREFUSED => e
-				@logger.error("ServerStatus at #{__LINE__}, #{e.to_s}: #{e.message}")
 				raise ConnectionError, e.message
 			rescue EOFError => e
-				msg = "Minecraft server returns unexpected EOF."
-				@logger.error("ServerStatus at #{__LINE__}, EOFError: #{msg}")
-				raise ConnectionError, msg
-			rescue JSON::ParserError
-				msg = "Minecraft server returns unexpected tokens as JSON."
-				@logger.error("ServerStatus at #{__LINE__}, JSON::ParserError: #{msg}")
-				raise ConnectionError, msg
+				raise ConnectionError, "Minecraft server returns unexpected EOF. #{e.message}"
+			rescue JSON::ParserError => e
+				raise ConnectionError, "Minecraft server returns unexpected tokens as JSON. #{e.message}"
 			rescue => e
-				@logger.error("ServerStatus at #{__LINE__}, #{e.to_s}: #{e.message}")
-				raise ConnectionError
+				raise ConnectionError, e.message
 			end
 
 			def fetch_status!

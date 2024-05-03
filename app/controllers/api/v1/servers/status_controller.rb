@@ -13,18 +13,23 @@ class Api::V1::Servers::StatusController < ApplicationController
 			@server.fetch_status!
 
 		rescue ArgumentError => e
+			logger.error e
 			render status: 400, json: {message: e.message}
 			return
 		rescue Acl::DeniedHostError => e
+			logger.error e
 			render status: 400, json: {message: e.message}
 			return
 		rescue Minetools::ServerStatusTool::ServiceUnavailableError => e
+			logger.error e
 			render status: 404, json: {message: e.message}
 			return
 		rescue Minetools::ServerStatusTool::ConnectionError => e
+			logger.error e
 			render status: 500, json: {message: e.message}
 			return
 		rescue => e
+			logger.error e
 			render status: 500, json: {message: e.message}
 			return
 		end

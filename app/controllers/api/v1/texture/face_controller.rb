@@ -20,6 +20,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 		rescue => e
 			@image_bin = steve_face_image.to_blob
 			@status = 404
+			logger.error e
 		end
 
 		send_data @image_bin, type: "image/png", disposition: 'inline', status: @status
