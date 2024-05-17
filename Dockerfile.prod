@@ -1,4 +1,4 @@
-FROM tkycraft/ianatld2yaml:2024-02-24_22-53 as tld_list_maker
+FROM tkycraft/ianatld2yaml:2024-05-17_22-12 as tld_list_maker
 RUN perl ianaTLD2yaml.pl
 
 FROM ruby:3.3.1-slim-bullseye
