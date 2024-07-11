@@ -1,7 +1,7 @@
 FROM tkycraft/ianatld2yaml:2024-07-06_21-05 as tld_list_maker
 RUN perl ianaTLD2yaml.pl
 
-FROM ruby:3.3.3-slim-bullseye
+FROM ruby:3.3.4-slim-bullseye
 
 WORKDIR /opt/app
 
