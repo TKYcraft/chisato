@@ -20,19 +20,20 @@ class Api::V1::Texture::FaceController < ApplicationController
 		rescue => e
 			@image_bin = steve_face_image.to_blob
 			@status = 404
+			logger.error e
 		end
 
 		send_data @image_bin, type: "image/png", disposition: 'inline', status: @status
 	end
 
 	private def request_face_image_of _name, _size
-		face = Minetools::FaceTool::Face.new name: _name, size: _size
+		face = Minetools::FaceTool::Face.new name: _name, size: _size, logger: logger
 		face.request!
 		return face.image
 	end
 
 	private def steve_face_image
-		@face = Minetools::FaceTool::Face.new size: @size
+		@face = Minetools::FaceTool::Face.new size: @size, logger: logger
 		return @face.get_face_image(Rails.root.join("app", "assets", "images", "steve.png").to_s)
 	end
 
