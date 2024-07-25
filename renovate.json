@@ -2,5 +2,25 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+  ],
+  "docker": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "managers": [
+        "dockerfile"
+      ],
+      "registryUrls": [
+        "https://registry.hub.docker.com"
+      ],
+      "packageNames": [
+        "tkycraft/ianatld2yaml"
+      ],
+      "enabled": true,
+      "schedule": [
+        "at any time"
+      ]
+    }
   ]
 }
