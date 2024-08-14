@@ -14,7 +14,7 @@ jobs:
     - name: build
       shell: bash
       run: |
-        docker-compose -f compose.yaml -f compose.rspec.yaml build
+        docker compose -f compose.yaml -f compose.rspec.yaml build
     - name: exec rspec
       run:  |
-        docker-compose -f compose.yaml -f compose.rspec.yaml run app sh entrypoint_test.sh
+        docker compose -f compose.yaml -f compose.rspec.yaml run app sh entrypoint_test.sh
