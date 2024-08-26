@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   namespace :api do
     namespace :v1 do
+      resources :health_check, only: [:index]
       namespace :servers do
         resources :status, only: [:index]
       end
