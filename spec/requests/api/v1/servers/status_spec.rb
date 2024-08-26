@@ -9,6 +9,32 @@ RSpec.describe "Api::V1::Servers::Statuses", type: :request do
 		# end
 
 		context "parameters" do
+			context "port validation" do
+				context "default: 1023" do
+					xit "returns 1023"
+				end
+
+				context "8888" do
+					before do
+						stub_const("Api::V1::Servers::StatusController::MC_PORT_ALLOW_MORE_THAN", 8888)
+					end
+
+					context "8887" do
+						xit "deny request" do
+							expect(Api::V1::Servers::StatusController::MC_PORT_ALLOW_MORE_THAN).to eq 8888
+						end
+					end
+
+					context "8888" do
+						xit "deny request"
+					end
+
+					context "8889" do
+						xit "allow request"
+					end
+				end
+			end
+
 			context "host" do
 				context "deny cases by ip address" do
 					context "IPv4 addresses" do
