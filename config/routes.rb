@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :health_check, only: [:index]
+      resources :teapot, only: [:index]
       namespace :servers do
         resources :status, only: [:index]
       end
