@@ -1,4 +1,6 @@
 class Api::V1::Servers::StatusController < ApplicationController
+	MC_PORT_ALLOW_MORE_THAN = App::Application.config.mc_port_allow_more_than
+
 	def index
 		@tld_list = App::Application.config.tld_list["TLD"]
 		@host = params[:host]
@@ -6,6 +8,9 @@ class Api::V1::Servers::StatusController < ApplicationController
 		@port = params[:port].to_i unless params[:port].nil?
 
 		begin
+			if @port.present?
+				raise ArgumentError unless MC_PORT_ALLOW_MORE_THAN < @port
+			end
 
 			@acl = Acl::Acl.new @host, @tld_list
 			@acl.filter!

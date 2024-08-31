@@ -6,6 +6,8 @@ services:
       dockerfile: ./Dockerfile
     image: "tkycraft/chisato:ruby3-rails7-0.0.1"
     container_name: chisato-server
+    # environment:
+      # - MC_PORT_ALLOW_MORE_THAN=1023
     volumes:
       - .:/opt/app/
     ports:

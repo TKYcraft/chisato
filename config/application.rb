@@ -43,6 +43,9 @@ module App
     end
     config.tld_list = tld_list
 
+    config.mc_port_allow_more_than = ENV["MC_PORT_ALLOW_MORE_THAN"] || 1023
+    config.mc_port_allow_more_than = config.mc_port_allow_more_than.to_i
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end
