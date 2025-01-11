@@ -18,7 +18,7 @@
         "tkycraft/ianatld2yaml"
       ],
       "enabled": true,
-      "versioning": "regex:^(?<date>\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2})$"
+      "versioning": "regex:^(?<major>\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2})$"
     }
   ]
 }
