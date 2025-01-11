@@ -18,9 +18,7 @@
         "tkycraft/ianatld2yaml"
       ],
       "enabled": true,
-      "schedule": [
-        "at any time"
-      ]
+      "versioning": "regex:^(?<date>\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2})$"
     }
   ]
 }
