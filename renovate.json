@@ -11,14 +11,10 @@
       "managers": [
         "dockerfile"
       ],
-      "registryUrls": [
-        "https://registry.hub.docker.com"
-      ],
       "packageNames": [
         "tkycraft/ianatld2yaml"
       ],
-      "enabled": true,
-      "versioning": "regex:^(?<major>\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2})$"
+      "enabled": true
     }
   ]
 }
