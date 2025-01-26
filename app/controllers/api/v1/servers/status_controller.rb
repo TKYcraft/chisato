@@ -48,6 +48,8 @@ class Api::V1::Servers::StatusController < ApplicationController
 		end
 
 		return {
+			version: _status["version"]["name"],
+			protocol: _status["version"]["protocol"],
 			name: _status["description"]["extra"][0]["text"],
 			max_players: _status["players"]["max"],
 			online_players: _status["players"]["online"],
