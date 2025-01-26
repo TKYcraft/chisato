@@ -41,10 +41,13 @@ class Api::V1::Servers::StatusController < ApplicationController
 	private def convert _status, _sort
 		raise ArgumentError unless _status.class == Hash
 
-		players = if _sort
-			_status["players"]["sample"].sort
-		else
-			_status["players"]["sample"]
+		players = _status["players"]["sample"]
+		players = [] if players.nil?
+
+		if _sort
+			players = players.sort do |a, b|
+				a["name"] <=> b["name"]
+			end
 		end
 
 		return {
