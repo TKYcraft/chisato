@@ -63,7 +63,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 				a["name"] <=> b["name"]
 			end
 		end
-		if _order == "desc"
+		if _order.downcase == "desc"
 			players = players.sort do |a, b|
 				b["name"] <=> a["name"]
 			end
