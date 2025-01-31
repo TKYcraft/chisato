@@ -6,8 +6,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 		@host = params[:host]
 		@port = nil
 		@port = params[:port].to_i unless params[:port].nil?
-		@sort = cast_bool(params[:sort].to_s)
-
+		@order = params[:order].to_s
 
 		begin
 			if @port.present?
@@ -35,20 +34,15 @@ class Api::V1::Servers::StatusController < ApplicationController
 			render status: 500, json: {message: e.message}
 			return
 		end
-		render status: 200, json: convert(@server.status, @sort)
+		render status: 200, json: convert(@server.status, @order)
 	end
 
-	private def convert _status, _sort
+	private def convert _status, _order
 		raise ArgumentError unless _status.class == Hash
 
 		players = _status["players"]["sample"]
 		players = [] if players.nil?
-
-		if _sort
-			players = players.sort do |a, b|
-				a["name"] <=> b["name"]
-			end
-		end
+		players = sort players, _order
 
 		return {
 			version: _status["version"]["name"],
@@ -60,7 +54,20 @@ class Api::V1::Servers::StatusController < ApplicationController
 		}
 	end
 
-	def cast_bool(str=false)
-		return ["TRUE", "1", "YES", "Y", "T"].include?(str.upcase)
+	private def sort _players, _order
+		raise ArgumentError unless _players.class == Array
+		players = _players
+
+		if _order == "asc"
+			players = players.sort do |a, b|
+				a["name"] <=> b["name"]
+			end
+		end
+		if _order == "desc"
+			players = players.sort do |a, b|
+				b["name"] <=> a["name"]
+			end
+		end
+		return players
 	end
 end
