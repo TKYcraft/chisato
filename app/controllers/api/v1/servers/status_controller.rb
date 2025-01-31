@@ -58,7 +58,7 @@ class Api::V1::Servers::StatusController < ApplicationController
 		raise ArgumentError unless _players.class == Array
 		players = _players
 
-		if _order == "asc"
+		if _order.downcase == "asc"
 			players = players.sort do |a, b|
 				a["name"] <=> b["name"]
 			end
