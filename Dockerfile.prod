@@ -12,7 +12,7 @@ RUN apt-get update \
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN gem install rails -v 7.1.3 \
+RUN gem install rails -v 8.0.0 \
 	&& gem install bundler -v 2.5.5
 
 COPY ./ /opt/app/
