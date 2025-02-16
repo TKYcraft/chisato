@@ -18,7 +18,7 @@ RUN \
 
 # install rails / bundler
 RUN which gem \
-	&& gem install rails -v 7.1.3 \
+	&& gem install rails -v 8.0.0 \
 	&& gem install bundler -v 2.5.5 \
 	&& rails -v
 
