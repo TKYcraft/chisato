@@ -10,9 +10,11 @@ RSpec.describe "Api::V1::Teapot", type: :request do
 
 		it "returns Cache-Control header including public, s-max-age, max-age" do
 			get api_v1_teapot_index_path
-			expect(response.headers["Cache-Control"]).to include("public")
-			expect(response.headers["Cache-Control"]).to include("s-max-age=3600")
-			expect(response.headers["Cache-Control"]).to include("max-age=10")
+			expect(response.headers["Cache-Control"]).to include("no-cache")
+			expect(response.headers["Cache-Control"]).to include("no-store")
+			expect(response.headers["Cache-Control"]).to include("must-revalidate")
+			expect(response.headers["Pragma"]).to eq("no-cache")
+			expect(response.headers["Expires"]).to eq("0")
 		end
 
 		it "returns response body" do
