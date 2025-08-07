@@ -52,7 +52,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 
 	private def set_cache_control_header
 		if use_cache?
-			expires_in 1.hours, public: true
+			response.headers['Cache-Control'] = 'public, max-age=10, s-maxage=3600'
 		else
 			expires_now
 		end
