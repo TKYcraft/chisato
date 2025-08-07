@@ -280,7 +280,7 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response.headers).to be_present
 				expect(response.headers["Content-Type"]).to eq "image/png"
 				expect(response.headers["Cache-Control"]).to include("public")
-				expect(responce.headers["Cache-Control"]).to include("s-max-age=3600")
+				expect(response.headers["Cache-Control"]).to include("s-max-age=3600")
 				expect(response.headers["Cache-Control"]).to include("max-age=10")
 			end
 		end
