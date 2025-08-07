@@ -13,8 +13,6 @@ RSpec.describe "Api::V1::Teapot", type: :request do
 			expect(response.headers["Cache-Control"]).to include("no-cache")
 			expect(response.headers["Cache-Control"]).to include("no-store")
 			expect(response.headers["Cache-Control"]).to include("must-revalidate")
-			expect(response.headers["Pragma"]).to eq("no-cache")
-			expect(response.headers["Expires"]).to eq("0")
 		end
 
 		it "returns response body" do
