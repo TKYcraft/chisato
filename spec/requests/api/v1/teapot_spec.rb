@@ -8,7 +8,7 @@ RSpec.describe "Api::V1::Teapot", type: :request do
 			expect(response.headers["Access-Control-Allow-Origin"]).to eq "*"
 		end
 
-		it "returns Cache-Control header including public, s-max-age, max-age" do
+		it "returns Cache-Control header including no-cache, no-store, must-revalidate" do
 			get api_v1_teapot_index_path
 			expect(response.headers["Cache-Control"]).to include("no-cache")
 			expect(response.headers["Cache-Control"]).to include("no-store")
