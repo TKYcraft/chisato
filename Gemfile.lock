@@ -196,7 +196,7 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
-    rmagick (6.1.4)
+    rmagick (6.1.5)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec-core (3.13.6)
