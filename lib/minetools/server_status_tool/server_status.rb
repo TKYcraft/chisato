@@ -2,13 +2,14 @@ module Minetools
 	module ServerStatusTool
 		require 'socket'
 		require "json"
+		require "logger"
 
 		class ServerStatus
 			attr_reader :host, :port, :status
-			def initialize options={host: nil, port: nil}
+			def initialize options={host: nil, port: nil, logger: nil}
 				@host = options[:host]
-				@port = options[:port]
-				@port = 25565 if @port.nil?   # default
+				@port = options[:port] || 25565
+				@logger = options[:logger] || Logger.new($stdout)
 				@status = nil
 				@socket = nil
 
@@ -71,11 +72,11 @@ module Minetools
 			rescue Errno::ECONNREFUSED => e
 				raise ConnectionError, e.message
 			rescue EOFError => e
-				raise ConnectionError, "Minecraft server returns unexpected EOF."
-			rescue JSON::ParserError
-				raise ConnectionError, "Minecraft server returns unexpected tokens as JSON."
+				raise ConnectionError, "Minecraft server returns unexpected EOF. #{e.message}"
+			rescue JSON::ParserError => e
+				raise ConnectionError, "Minecraft server returns unexpected tokens as JSON. #{e.message}"
 			rescue => e
-				raise ConnectionError
+				raise ConnectionError, e.message
 			end
 
 			def fetch_status!
