@@ -18,7 +18,7 @@ docker compose down   # down containers.
 
 ### options
 
-* Ruby version : 3.2.2 (configure on Dockerfile, Gemfile)
+* Ruby version : 3.4.1 (configure on Dockerfile, Gemfile)
 
 * Database creation / initialization
   
