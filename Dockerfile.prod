@@ -1,7 +1,7 @@
 FROM tkycraft/ianatld2yaml:2024-07-24_07-42 as tld_list_maker
 RUN perl ianaTLD2yaml.pl
 
-FROM ruby:3.4.1-slim-bookworm
+FROM ruby:3.4.2-slim-bookworm
 
 WORKDIR /opt/app
 
@@ -9,6 +9,7 @@ RUN apt-get update \
 	&& apt-get install -y \
 	build-essential \
 	libmagickwand-dev\
+	libyaml-dev\
 	&& apt-get clean -y \
 	&& rm -rf /var/lib/apt/lists/*
 

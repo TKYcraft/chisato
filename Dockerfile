@@ -1,4 +1,4 @@
-FROM ruby:3.4.1-slim-bookworm
+FROM ruby:3.4.2-slim-bookworm
 
 WORKDIR /opt/app
 
@@ -8,6 +8,7 @@ RUN \
 	&& apt-get install -y \
 		build-essential \
 		libmagickwand-dev\
+		libyaml-dev\
 		curl \
 # clear apt cache.
 	&& apt-get clean -y \
