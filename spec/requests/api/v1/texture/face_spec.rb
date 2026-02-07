@@ -27,7 +27,8 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response.headers["Content-Type"]).to eq "image/png"
 
 				expect(response.headers["Access-Control-Allow-Origin"]).to eq "*"
-				expect(response.headers["Cache-Control"]).to include "max-age=3600"
+				expect(response.headers["Cache-Control"]).to include "s-max-age=3600"
+				expect(response.headers["Cache-Control"]).to include "max-age=10"
 				expect(response.headers["Cache-Control"]).to include "public"
 			end
 
@@ -279,7 +280,8 @@ RSpec.describe "Api::V1::Texture::Faces", type: :request do
 				expect(response.headers).to be_present
 				expect(response.headers["Content-Type"]).to eq "image/png"
 				expect(response.headers["Cache-Control"]).to include("public")
-				expect(response.headers["Cache-Control"]).to include("max-age=3600")
+				expect(response.headers["Cache-Control"]).to include("s-max-age=3600")
+				expect(response.headers["Cache-Control"]).to include("max-age=10")
 			end
 		end
 	end
