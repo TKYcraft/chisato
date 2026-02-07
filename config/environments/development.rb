@@ -36,6 +36,19 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   # config.active_storage.service = :local
 
+  # Include generic and useful information about system operation, but avoid logging too much
+  # information to avoid inadvertent exposure of personally identifiable information (PII).
+  config.log_level = :debug
+  logger = ActiveSupport::Logger.new(STDOUT)
+
+  if ENV["RAILS_LOG_DEBUGGING"].present?
+    # similar to production logger settings.
+    config.log_level = :info
+    config.log_formatter = ::Logger::Formatter.new
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  end
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

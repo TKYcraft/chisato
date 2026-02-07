@@ -12,6 +12,8 @@ services:
       - .:/opt/app/
     ports:
       - 3000:3000
+    # environment:
+    #   - RAILS_LOG_DEBUGGING=true
     healthcheck:
       test: ["CMD", "curl", "-m", "5", "http://localhost:3000"]
       interval: 15s

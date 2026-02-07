@@ -4,20 +4,22 @@ module Minetools
 		require 'uri'
 		require "json"
 		require 'base64'
+		require "logger"
 
 		class Face
 			attr_reader :name, :uuid, :skin_image_url, :size, :image
-			def initialize options={name: nil, size: nil}
+			def initialize options={name: nil, size: nil, logger: nil}
 				@name = options[:name]
 				@size = options[:size]
 				@size = 512 if @size.nil?   # set default
+				@logger = options[:logger] || Logger.new($stdout)
 				@skin_image_url = nil
 				@uuid = nil
 				@image = nil
 			end
 
 			def request!
-				raise FaceRequestError if @name.nil?
+				raise FaceRequestError, "Not given name." if @name.nil?
 				@uuid = get_minecraft_uuid(@name)
 				@skin_image_url = get_skin_image_url(@uuid)
 				@image = get_face_image(@skin_image_url, @size)
@@ -29,9 +31,7 @@ module Minetools
 				raise ArgumentError if name == ""
 
 				_json = request_json("https://api.mojang.com/users/profiles/minecraft/#{name}")
-				raise GetUUIDError, "this user name is not exist." unless _json["errorMessage"].nil?
-				# TODO: include API errorMessage to Exception message.
-
+				raise GetUUIDError, "This User name is not exist." unless _json["errorMessage"].nil?
 				return _json["id"]
 			end
 
@@ -40,7 +40,7 @@ module Minetools
 				raise ArgumentError if uuid == ""
 				
 				_json = request_json("https://sessionserver.mojang.com/session/minecraft/profile/#{uuid}")
-				raise GetProfileError, "this uuid is invalid. #{_json["errorMessage"]}" unless _json["errorMessage"].nil?
+				raise GetProfileError, "This uuid is invalid." unless _json["errorMessage"].nil?
 
 				_json_str = Base64.decode64(_json["properties"].first["value"])
 				begin
@@ -49,8 +49,7 @@ module Minetools
 				rescue JSON::ParserError => e
 					raise GetProfileError, e.message
 				rescue => e
-					warn e.message
-					raise GetProfileError, e.message
+					raise GetProfileError, "!! #{e.message}"
 				end
 				return _json
 			end
@@ -66,7 +65,8 @@ module Minetools
 					.try(:[], "textures")
 					.try(:[], "SKIN")
 					.try(:[], "url")
-				raise GetSkinUrlError, "there is no skin url." if _url.nil?
+				raise GetSkinUrlError, "There is no skin url." if _url.nil?
+
 				return _url
 			end
 
@@ -103,8 +103,7 @@ module Minetools
 				rescue SocketError=> e
 					raise APIRequestError, e.message
 				rescue => e
-					warn e.message
-					raise APIRequestError, e.message
+					raise APIRequestError, "!! #{e.message}"
 				end
 
 				begin
@@ -112,8 +111,7 @@ module Minetools
 				rescue JSON::ParserError => e
 					raise APIRequestError, e.message
 				rescue => e
-					warn e.message
-					raise APIRequestError, e.message
+					raise APIRequestError, "!! #{e.message}"
 				end
 
 				return json
