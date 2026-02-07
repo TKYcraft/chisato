@@ -1,4 +1,4 @@
-FROM ruby:3.4.2-slim-bookworm
+FROM ruby:3.4.8-slim-bookworm
 
 WORKDIR /opt/app
 
