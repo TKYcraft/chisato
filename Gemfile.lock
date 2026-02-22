@@ -137,7 +137,7 @@ GEM
     nokogiri (1.19.0-x86_64-linux-gnu)
       racc (~> 1.4)
     observer (0.1.2)
-    pkg-config (1.5.9)
+    pkg-config (1.6.5)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -198,7 +198,7 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
-    rmagick (6.1.5)
+    rmagick (6.2.0)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec-core (3.13.6)
