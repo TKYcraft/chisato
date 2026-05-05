@@ -39,7 +39,7 @@ docker compose ps
 
 **`lib/minetools/server_status_tool/server_status.rb`** — Connects to Minecraft servers via raw TCP socket using the Minecraft handshake protocol. Parses the JSON status payload directly from the byte stream. Default port: 25565.
 
-**`lib/minetools/face_tool/face.rb`** — Fetches Minecraft player face images by calling the Mojang API (`api.mojang.com` → `sessionserver.mojang.com`) to resolve UUID and skin URL, then crops and composites the face + hat layers using RMagick. Falls back to `app/assets/images/steve.png` on any error.
+**`lib/minetools/face_tool/face.rb`** — Fetches Minecraft player face images by calling the Mojang API (`api.mojang.com` → `sessionserver.mojang.com`) to resolve UUID and skin URL, then crops and composites the face + hat layers using RMagick. Raises on errors; the fallback to `app/assets/images/steve.png` is implemented in `Api::V1::Texture::FaceController`.
 
 ### Configuration
 
