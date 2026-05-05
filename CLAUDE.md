@@ -35,7 +35,7 @@ docker compose ps
 
 ### Domain Libraries (`lib/`)
 
-**`lib/acl/acl.rb`** — Host validation before any outbound request. Blocks private/reserved IP ranges and validates TLD against `config/tld_list.yaml`. Raises `Acl::DeniedHostError` on rejection.
+**`lib/acl/acl.rb`** — Validates the user-provided `host` parameter for the server status endpoint. Blocks private/reserved IP ranges and validates TLD against `config/tld_list.yaml`. Raises `Acl::DeniedHostError` on rejection.
 
 **`lib/minetools/server_status_tool/server_status.rb`** — Connects to Minecraft servers via raw TCP socket using the Minecraft handshake protocol. Parses the JSON status payload directly from the byte stream. Default port: 25565.
 
