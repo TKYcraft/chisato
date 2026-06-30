@@ -200,7 +200,7 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
-    rmagick (6.3.0)
+    rmagick (7.0.5)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec-core (3.13.6)
@@ -257,7 +257,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 8.0)
   rails (~> 8.1.0)
-  rmagick (~> 6.0)
+  rmagick (~> 7.0)
   rspec-rails (~> 8.0.0)
   sprockets-rails
   tzinfo-data
