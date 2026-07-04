@@ -349,6 +349,58 @@ RSpec.describe Minetools::FaceTool::Face do
 			end
 		end
 
+		describe "get_image_from()" do
+			before do
+				allow(face).to receive(:get_image_from).and_call_original
+			end
+
+			context "give HTTP URL" do
+				before do
+					allow(face).to receive(:http_get).and_return(File.binread('./spec/fixtures/skin_image_fixture.png'))
+				end
+
+				it "returns Magick::Image fetched via http_get" do
+					url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
+					image = face.get_image_from url
+
+					expect(image.class).to eq Magick::Image
+					expect(face).to have_received(:http_get).once
+				end
+
+				it "does not use ImageMagick's HTTP coder (Magick::Image.read)" do
+					allow(Magick::Image).to receive(:read)
+
+					url = "http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
+					face.get_image_from url
+
+					expect(Magick::Image).not_to have_received(:read)
+				end
+			end
+
+			context "give HTTPS URL" do
+				before do
+					allow(face).to receive(:http_get).and_return(File.binread('./spec/fixtures/skin_image_fixture.png'))
+				end
+
+				it "returns Magick::Image fetched via http_get" do
+					url = "https://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
+					image = face.get_image_from url
+
+					expect(image.class).to eq Magick::Image
+					expect(face).to have_received(:http_get).once
+				end
+			end
+
+			context "give local file path" do
+				it "returns Magick::Image without http_get" do
+					image = face.get_image_from './spec/fixtures/skin_image_fixture.png'
+
+					expect(image.class).to eq Magick::Image
+					expect(face).not_to have_received(:http_get)
+				end
+			end
+		end
+
 		describe "request!()" do
 			context "set name to instance correctly" do
 				let(:face) { described_class.new name: "KrisJelbring" }

@@ -89,7 +89,14 @@ module Minetools
 			end
 
 			def get_image_from(_url)
-				Magick::Image.read(_url).first
+				parsed_uri = URI.parse(_url)
+				# ImageMagick's HTTP coder is disabled by Debian's security policy,
+				# so fetch remote images with Net::HTTP and decode from blob.
+				if parsed_uri.kind_of? URI::HTTP   # covers both URI::HTTP and URI::HTTPS
+					Magick::Image.from_blob(http_get(parsed_uri)).first
+				else
+					Magick::Image.read(_url).first
+				end
 			end
 
 			def request_json _url=""
