@@ -401,6 +401,93 @@ RSpec.describe Minetools::FaceTool::Face do
 			end
 		end
 
+		describe "http_get()" do
+			let(:parsed_uri){ URI.parse("http://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9") }
+			let(:success_response){
+				_res = Net::HTTPOK.new("1.1", "200", "OK")
+				allow(_res).to receive(:body).and_return("PNG_BINARY")
+				_res
+			}
+			let(:redirect_response){
+				_res = Net::HTTPMovedPermanently.new("1.1", "301", "Moved Permanently")
+				_res["location"] = "https://textures.minecraft.net/texture/b47b21bb3e7f79bdf2a5e8e041f7ff9e178dc15645f6449b8e55f906604c07f9"
+				_res
+			}
+
+			before do
+				allow(face).to receive(:http_get).and_call_original
+			end
+
+			context "response is 200" do
+				before do
+					allow(Net::HTTP).to receive(:start).and_return(success_response)
+				end
+
+				it "returns response body" do
+					expect(face.http_get parsed_uri).to eq "PNG_BINARY"
+				end
+
+				it "connects with explicit open/read timeouts" do
+					face.http_get parsed_uri
+
+					expect(Net::HTTP).to have_received(:start).with(
+						"textures.minecraft.net", 80,
+						hash_including(use_ssl: false, open_timeout: 5, read_timeout: 5)
+					)
+				end
+			end
+
+			context "response is 301 once, then 200" do
+				before do
+					allow(Net::HTTP).to receive(:start).and_return(redirect_response, success_response)
+				end
+
+				it "follows the redirect and returns body" do
+					expect(face.http_get parsed_uri).to eq "PNG_BINARY"
+					expect(Net::HTTP).to have_received(:start).twice
+				end
+
+				it "connects to the redirect target with use_ssl" do
+					face.http_get parsed_uri
+
+					expect(Net::HTTP).to have_received(:start).with(
+						"textures.minecraft.net", 443,
+						hash_including(use_ssl: true)
+					)
+				end
+			end
+
+			context "response is 301 repeatedly" do
+				before do
+					allow(Net::HTTP).to receive(:start).and_return(redirect_response)
+				end
+
+				it "raise APIRequestError" do
+					expect{face.http_get parsed_uri}.to raise_error(Minetools::FaceTool::APIRequestError)
+				end
+			end
+
+			context "response is 404" do
+				before do
+					allow(Net::HTTP).to receive(:start).and_return(Net::HTTPNotFound.new("1.1", "404", "Not Found"))
+				end
+
+				it "raise APIRequestError" do
+					expect{face.http_get parsed_uri}.to raise_error(Minetools::FaceTool::APIRequestError)
+				end
+			end
+
+			context "response is 500" do
+				before do
+					allow(Net::HTTP).to receive(:start).and_return(Net::HTTPInternalServerError.new("1.1", "500", "Internal Server Error"))
+				end
+
+				it "raise APIRequestError" do
+					expect{face.http_get parsed_uri}.to raise_error(Minetools::FaceTool::APIRequestError)
+				end
+			end
+		end
+
 		describe "request!()" do
 			context "set name to instance correctly" do
 				let(:face) { described_class.new name: "KrisJelbring" }
