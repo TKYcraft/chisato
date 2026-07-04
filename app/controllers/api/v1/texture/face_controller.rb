@@ -18,6 +18,7 @@ class Api::V1::Texture::FaceController < ApplicationController
 		begin
 			@image_bin = request_face_image_of(params[:id], @size).to_blob
 		rescue => e
+			Rails.logger.warn "[FaceController] fallback to steve: #{e.class}: #{e.message}"
 			@image_bin = steve_face_image.to_blob
 			@status = 404
 		end

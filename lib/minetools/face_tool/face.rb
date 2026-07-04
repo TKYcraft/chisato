@@ -89,7 +89,14 @@ module Minetools
 			end
 
 			def get_image_from(_url)
-				Magick::Image.read(_url).first
+				parsed_uri = URI.parse(_url)
+				# ImageMagick's HTTP coder is disabled by Debian's security policy,
+				# so fetch remote images with Net::HTTP and decode from blob.
+				if parsed_uri.kind_of? URI::HTTP   # covers both URI::HTTP and URI::HTTPS
+					Magick::Image.from_blob(http_get(parsed_uri)).first
+				else
+					Magick::Image.read(_url).first
+				end
 			end
 
 			def request_json _url=""
@@ -119,8 +126,22 @@ module Minetools
 				return json
 			end
 
-			def http_get(_parsed_uri)
-				Net::HTTP.get(_parsed_uri)
+			def http_get(_parsed_uri, _redirect_limit=1)
+				response = Net::HTTP.start(_parsed_uri.host, _parsed_uri.port,
+						use_ssl: _parsed_uri.scheme == "https",
+						open_timeout: 5, read_timeout: 5) do |http|
+					http.get(_parsed_uri.request_uri)
+				end
+
+				case response
+				when Net::HTTPSuccess
+					response.body
+				when Net::HTTPRedirection
+					raise APIRequestError, "too many redirects." if _redirect_limit <= 0
+					http_get(URI.join(_parsed_uri.to_s, response["location"]), _redirect_limit - 1)
+				else
+					raise APIRequestError, "unexpected response status #{response.code}."
+				end
 			end
 		end
 
