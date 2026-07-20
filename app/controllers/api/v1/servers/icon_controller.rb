@@ -2,7 +2,7 @@ class Api::V1::Servers::IconController < ApplicationController
 	MC_PORT_ALLOW_MORE_THAN = App::Application.config.mc_port_allow_more_than
 	FAVICON_PREFIX = /\Adata:\s*image\/png;base64,/
 
-	before_action :set_cache_control_header
+	after_action :set_cache_control_header
 
 	def index
 		@tld_list = App::Application.config.tld_list["TLD"]
@@ -62,7 +62,9 @@ class Api::V1::Servers::IconController < ApplicationController
 	end
 
 	private def set_cache_control_header
-		if use_cache?
+		# Cache successful responses only. Caching error responses (400/404/500)
+		# could keep serving stale errors for up to 1 hour after recovery.
+		if response.successful? && use_cache?
 			expires_in 1.hours, public: true
 		else
 			expires_now

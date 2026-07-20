@@ -116,6 +116,9 @@ RSpec.describe "Api::V1::Servers::Icons", type: :request do
 					# Assert
 					expect(response).to have_http_status 404
 					expect(response.body).to be_empty
+
+					expect(response.headers["Cache-Control"]).to include "no-cache"
+					expect(response.headers["Cache-Control"]).not_to include "max-age=3600"
 				end
 			end
 
@@ -219,6 +222,9 @@ RSpec.describe "Api::V1::Servers::Icons", type: :request do
 					json = JSON.parse response.body
 					expect(response).to have_http_status 500
 					expect(json["message"]).to eq "connection failed."
+
+					expect(response.headers["Cache-Control"]).to include "no-cache"
+					expect(response.headers["Cache-Control"]).not_to include "max-age=3600"
 				end
 			end
 		end
