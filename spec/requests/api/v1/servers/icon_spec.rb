@@ -4,7 +4,7 @@ RSpec.describe "Api::V1::Servers::Icons", type: :request do
 	describe "index action" do
 		let(:server_status_tool) { instance_spy(Minetools::ServerStatusTool::ServerStatus) }
 		let(:acl_tool) { instance_spy(Acl::Acl) }
-		let(:favicon_bytes) { "fake png bytes" }
+		let(:favicon_bytes) { "\x89PNG\r\n\x1a\nfake png body".b }
 		let(:favicon) { "data:image/png;base64,#{Base64.strict_encode64(favicon_bytes)}" }
 		let(:server_status) { {
 			version: {
@@ -124,6 +124,19 @@ RSpec.describe "Api::V1::Servers::Icons", type: :request do
 
 			context "favicon has non-png MIME prefix" do
 				let(:favicon) { "data:image/jpeg;base64,#{Base64.strict_encode64(favicon_bytes)}" }
+
+				it "returns 404 with empty body" do
+					# Act
+					get api_v1_servers_icon_index_path, params: {host: "example.com"}
+
+					# Assert
+					expect(response).to have_http_status 404
+					expect(response.body).to be_empty
+				end
+			end
+
+			context "favicon decodes to non-png data" do
+				let(:favicon) { "data:image/png;base64,#{Base64.strict_encode64('not a png binary')}" }
 
 				it "returns 404 with empty body" do
 					# Act

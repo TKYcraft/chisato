@@ -1,6 +1,7 @@
 class Api::V1::Servers::IconController < ApplicationController
 	MC_PORT_ALLOW_MORE_THAN = App::Application.config.mc_port_allow_more_than
 	FAVICON_PREFIX = /\Adata:\s*image\/png;base64,/
+	PNG_SIGNATURE = "\x89PNG\r\n\x1a\n".b.freeze
 
 	after_action :set_cache_control_header
 
@@ -49,7 +50,10 @@ class Api::V1::Servers::IconController < ApplicationController
 		return nil unless _favicon.class == String
 		return nil unless FAVICON_PREFIX.match? _favicon
 		encoded = _favicon.sub(FAVICON_PREFIX, "").gsub(/\s+/, "")
-		return Base64.strict_decode64(encoded)
+		decoded = Base64.strict_decode64(encoded)
+		# The declared MIME type is not trustworthy; serve only real PNG data.
+		return nil unless decoded.start_with? PNG_SIGNATURE
+		return decoded
 	rescue ArgumentError
 		return nil
 	end
