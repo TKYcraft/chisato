@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :teapot, only: [:index]
       namespace :servers do
         resources :status, only: [:index]
+        resources :icon, only: [:index]
       end
       namespace :texture do
         resources :face, only: [:show]
