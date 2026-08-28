@@ -2,7 +2,8 @@ require 'rails_helper'
 require './lib/minetools/server_status_tool/server_status.rb'
 
 RSpec.describe Minetools::ServerStatusTool::ServerStatus do
-	let(:server) { described_class.new host: "minecraft.example.com" }
+	let(:logger_mock){ instance_spy Logger }
+	let(:server) { described_class.new host: "minecraft.example.com", logger: logger_mock }
 	let(:socket_mock){ instance_spy TCPSocket }
 
 	it "is object of Minetools::ServerStatusTool::ServerStatus class" do
@@ -12,15 +13,19 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 
 	describe "methods" do
 		describe "initialize()" do
-			context "give correct only hostname" do
+			context "giving correct only hostname" do
 				it "set instance variables" do
 					_h = "minecraft.example.com"
 					server = described_class.new host: _h
 					expect(server.host).to eq _h
+					expect(server.port).to eq 25565
+					expect(server.instance_variable_get(:@logger).class).to eq Logger
+					expect(server.instance_variable_get(:@status)).to eq nil
+					expect(server.instance_variable_get(:@socket)).to eq nil
 				end
 			end
 
-			context "give correct hostname and port" do
+			context "giving correct hostname and port" do
 				it "set instance variables" do
 					_h = "minecraft.example.com"
 					_p = 25567
@@ -32,7 +37,7 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 				end
 			end
 
-			context "give bad parameter to host name" do
+			context "giving bad parameter to host name" do
 				it "raise ArgumentError with non-string" do
 					_h = true
 					expect{
@@ -41,7 +46,7 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 				end
 			end
 
-			context "give bad parameter to port" do
+			context "giving bad parameter to port" do
 				it "raise ArgumentError with -1" do
 					_h = "minecraft.example.com"
 					_p = -1
@@ -64,6 +69,18 @@ RSpec.describe Minetools::ServerStatusTool::ServerStatus do
 					expect{
 						described_class.new host: _h, port: _p
 					}.to raise_error ArgumentError
+				end
+			end
+
+			context "giving custom logger instance" do
+				it "set custom logger instance" do
+					class CustomLogger < Logger; end
+					_l = CustomLogger.new($stdout)
+					_h = "minecraft.example.com"
+
+					server = described_class.new host: _h, logger: _l
+					expect(server.instance_variable_get(:@logger).class).to eq CustomLogger
+					expect(server.instance_variable_get(:@logger)).to be _l
 				end
 			end
 		end
