@@ -200,7 +200,7 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
-    rmagick (7.1.4)
+    rmagick (7.1.6)
       observer (~> 0.1)
       pkg-config (~> 1.4)
     rspec-core (3.13.6)
@@ -264,7 +264,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.4.10p104
+   ruby 3.4.11p137
 
 BUNDLED WITH
    2.5.5
