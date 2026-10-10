@@ -23,6 +23,12 @@ ENV BUNDLE_WITHOUT development:test
 
 RUN bundle install
 
+RUN groupadd -g 1000 rails \
+ && useradd -u 1000 -g rails -m -s /usr/sbin/nologin rails \
+ && chown -R rails:rails /opt/app
+
+USER 1000:1000
+
 EXPOSE 3000
 
 ENTRYPOINT ["bin/rails", "s", "-e", "production", "-b", "0.0.0.0"]
