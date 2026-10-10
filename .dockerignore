@@ -1,0 +1,129 @@
+# ───── VCS ─────
+.git
+.gitignore
+.gitattributes
+.github
+.gitkeep
+
+# ───── Docker 自体 (COPY . . しても自分自身は不要) ─────
+Dockerfile
+Dockerfile.*
+.dockerignore
+compose.yaml
+compose.*.yaml
+docker-compose*.yml
+docker-compose*.yaml
+
+# ───── CI/CD / renovate / IDE / AI ─────
+.gitlab-ci.yml
+.circleci
+.serena
+.vscode
+.idea
+.cursor
+.devcontainer
+*.code-workspace
+CLAUDE.md
+AGENTS.md
+.aider*
+.mcp.json
+
+# ───── docs / meta (image に不要) ─────
+README*
+LICENCE*
+LICENSE*
+CHANGELOG*
+CONTRIBUTING*
+*.md
+docs/
+renovate.json
+.editorconfig
+
+# ───── Ruby / Rails: 秘密 ─────
+# Rails credentials の master key は env (RAILS_MASTER_KEY) で渡す。image に焼かない。
+config/master.key
+config/credentials/*.key
+config/*.key
+# 他の env / credential 系
+.env
+.env.*
+.envrc
+*.pem
+*.key
+!**/public.key
+!**/*.pub
+# .ssh や ec2 key を間違って置いてもブロック
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+id_ecdsa*
+
+# ───── Ruby / Rails: 開発/テスト ─────
+spec
+test
+features
+.rspec
+.rspec*
+.rubocop.yml
+.rubocop_todo.yml
+.standard.yml
+.simplecov
+coverage
+tmp
+log
+# bundler のローカル設定/キャッシュ
+.bundle
+vendor/bundle
+vendor/cache
+# precompiled assets (本番は build 時に作る)
+public/assets
+public/packs
+public/packs-test
+# storage は PVC マウント想定、image に lingering file 混入を防ぐ
+storage
+# node (asset build 用がある場合)
+node_modules
+yarn-error.log
+npm-debug.log*
+.yarn
+
+# ───── Container / debug ─────
+*.pid
+*.sock
+.pryrc
+.byebug_history
+.irb_history
+.rails_history
+
+# ───── OS / editor junk ─────
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.*.un~
+
+# ───── backup / dumps ─────
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.tmp
+*.log
+dump.rdb
+*.sql
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+
+# ───── 大型 binary / archive (間違い混入防止) ─────
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
