@@ -17,4 +17,21 @@ jobs:
         docker compose -f compose.yaml -f compose.rspec.yaml build
     - name: exec rspec
       run:  |
-        docker compose -f compose.yaml -f compose.rspec.yaml run app sh entrypoint_test.sh
+        docker compose -f compose.yaml -f compose.rspec.yaml run --rm -T app
+
+  # Keep verifying that the production image still builds on every pull request.
+  # The production image itself is pushed only by docker-build-prod-ci on main.
+  build-prod-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: build prod image without pushing
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: Dockerfile.prod
+        platforms: linux/amd64
+        cache-from: type=gha
+        push: false
