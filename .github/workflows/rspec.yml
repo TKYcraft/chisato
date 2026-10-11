@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   rspec:
     runs-on: ubuntu-latest
@@ -25,13 +28,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
     - name: build prod image without pushing
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: Dockerfile.prod
-        platforms: linux/amd64
-        cache-from: type=gha
-        push: false
+      run: docker build -f Dockerfile.prod -t chisato:prod-check .
