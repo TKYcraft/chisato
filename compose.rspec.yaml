@@ -5,9 +5,10 @@ services:
       - DISABLE_FOCUS_SPEC=true
     build:
       context: .
-      dockerfile: ./Dockerfile.prod
-    image: "tkycraft/mahirun:rspec1.0"
+      dockerfile: ./Dockerfile
+    image: "tkycraft/chisato:rspec"
     depends_on: {}
-    volumes: []
-    healthcheck: {}
+    healthcheck:
+      disable: true
     entrypoint: []
+    command: ["bundle", "exec", "rspec"]
