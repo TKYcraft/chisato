@@ -49,4 +49,4 @@ docker compose ps
 
 ### Testing
 
-Specs mirror the lib structure under `spec/lib/` and request specs under `spec/requests/`. The `compose.rspec.yaml` file is used for running tests in CI against a production-like image build.
+Specs mirror the lib structure under `spec/lib/` and request specs under `spec/requests/`. The `compose.rspec.yaml` file overrides `compose.yaml` to run RSpec in CI on the development image (`Dockerfile`) with the repository bind-mounted, matching how tests are run locally. The production image (`Dockerfile.prod`) excludes test gems and runs as a non-root user, so it cannot host RSpec; CI verifies it with a build-only job instead.
