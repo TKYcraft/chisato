@@ -1,7 +1,7 @@
-FROM tkycraft/ianatld2yaml:2024-07-24_07-42 as tld_list_maker
+FROM tkycraft/ianatld2yaml:2024-07-24_07-42 AS tld_list_maker
 RUN perl ianaTLD2yaml.pl
 
-FROM ruby:3.4.12-slim-bookworm
+FROM ruby:3.4.12-slim-trixie
 
 WORKDIR /opt/app
 
@@ -19,7 +19,7 @@ RUN gem install rails -v 8.0.0 \
 COPY ./ /opt/app/
 COPY --from=tld_list_maker /opt/app/tld_list.yaml /opt/app/config/tld_list.yaml
 
-ENV BUNDLE_WITHOUT development:test
+ENV BUNDLE_WITHOUT=development:test
 
 RUN bundle install
 
