@@ -1,7 +1,7 @@
 FROM tkycraft/ianatld2yaml:2024-07-24_07-42 AS tld_list_maker
 RUN perl ianaTLD2yaml.pl
 
-FROM ruby:3.4.12-slim-trixie
+FROM ruby:4.0.9-slim-trixie
 
 WORKDIR /opt/app
 
