@@ -29,6 +29,7 @@ docker compose ps
 | Controller | Route | Purpose |
 |---|---|---|
 | `Servers::StatusController` | `GET /api/v1/servers/status` | Fetch Minecraft server status via TCP |
+| `Servers::IconController` | `GET /api/v1/servers/icon` | Fetch Minecraft server icon (favicon) as PNG |
 | `Texture::FaceController` | `GET /api/v1/texture/face/:id.png` | Fetch player face image |
 | `HealthCheckController` | `GET /api/v1/health_check` | Health check |
 | `TeapotController` | `GET /api/v1/teapot` | 418 response |
